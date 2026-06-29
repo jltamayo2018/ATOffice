@@ -1,0 +1,99 @@
+---
+const emailDestino = 'hola@tuestudio.com';
+---
+
+<form id="contact-form" data-email={emailDestino} class="space-y-8">
+  <div>
+    <label for="nombre" class="text-xs tracking-widest uppercase text-gris">
+      Nombre
+    </label>
+    <input
+      id="nombre"
+      name="nombre"
+      type="text"
+      required
+      placeholder="Tu nombre"
+      class="input-form"
+    />
+  </div>
+
+  <div>
+    <label for="email" class="text-xs tracking-widest uppercase text-gris">
+      Email
+    </label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      required
+      placeholder="tu@email.com"
+      class="input-form"
+    />
+  </div>
+
+  <div>
+    <label for="telefono" class="text-xs tracking-widest uppercase text-gris">
+      Teléfono
+    </label>
+    <input
+      id="telefono"
+      name="telefono"
+      type="tel"
+      placeholder="+34 600 000 000"
+      class="input-form"
+    />
+  </div>
+
+  <div>
+    <label for="mensaje" class="text-xs tracking-widest uppercase text-gris">
+      Cuéntanos tu proyecto
+    </label>
+    <textarea
+      id="mensaje"
+      name="mensaje"
+      rows="6"
+      required
+      placeholder="Reforma, vivienda, local, interiorismo..."
+      class="input-form resize-none"
+    ></textarea>
+  </div>
+
+  <button
+    type="submit"
+    class="px-10 py-4 bg-negro text-crema text-xs tracking-widest uppercase hover:bg-salvia transition-colors duration-300"
+  >
+    Enviar mensaje
+  </button>
+
+  <p class="text-xs text-gris leading-relaxed">
+    Al enviar el formulario se abrirá tu aplicación de correo para mandar el mensaje.
+  </p>
+</form>
+
+<script>
+  const form = document.querySelector('#contact-form');
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const formElement = event.currentTarget;
+    const data = new FormData(formElement);
+    const emailDestino = formElement.dataset.email;
+
+    const nombre = data.get('nombre') || '';
+    const email = data.get('email') || '';
+    const telefono = data.get('telefono') || '';
+    const mensaje = data.get('mensaje') || '';
+
+    const subject = encodeURIComponent(`Nuevo proyecto web - ${nombre}`);
+
+    const body = encodeURIComponent(
+      `Nombre: ${nombre}\n` +
+      `Email: ${email}\n` +
+      `Teléfono: ${telefono}\n\n` +
+      `Mensaje:\n${mensaje}`
+    );
+
+    window.location.href = `mailto:${emailDestino}?subject=${subject}&body=${body}`;
+  });
+</script>

@@ -1,0 +1,132 @@
+---
+import BaseLayout   from '../layouts/BaseLayout.astro';
+import ProyectoCard from '../components/ProyectoCard.astro';
+
+const proyectos = [
+  {
+    titulo: 'Piso en Chamberí',
+    tipo: 'Reforma integral',
+    lugar: 'Madrid',
+    año: '2024',
+    imagen: '/images/proyectos/chamberi.jpg',
+    slug: 'piso-chamberi',
+    destacado: true,
+  },
+  {
+    titulo: 'Cafetería Miel',
+    tipo: 'Local comercial',
+    lugar: 'Malasaña, Madrid',
+    año: '2023',
+    imagen: '/images/proyectos/cafeteria-miel.jpg',
+    slug: 'cafeteria-miel',
+  },
+  {
+    titulo: 'Casa de campo',
+    tipo: 'Obra nueva',
+    lugar: 'Sierra de Madrid',
+    año: '2023',
+    imagen: '/images/proyectos/casa-campo.jpg',
+    slug: 'casa-campo',
+  },
+  {
+    titulo: 'Oficina creativa',
+    tipo: 'Diseño de interiores',
+    lugar: 'Retiro, Madrid',
+    año: '2023',
+    imagen: '/images/proyectos/oficina.jpg',
+    slug: 'oficina-creativa',
+  },
+  {
+    titulo: 'Piso en Salamanca',
+    tipo: 'Reforma integral',
+    lugar: 'Madrid',
+    año: '2022',
+    imagen: '/images/proyectos/salamanca.jpg',
+    slug: 'piso-salamanca',
+  },
+  {
+    titulo: 'Restaurante Raíz',
+    tipo: 'Local comercial',
+    lugar: 'La Latina, Madrid',
+    año: '2022',
+    imagen: '/images/proyectos/restaurante-raiz.jpg',
+    slug: 'restaurante-raiz',
+  },
+];
+
+// Tipos únicos para el filtro
+const tipos = ['Todos', ...new Set(proyectos.map((p) => p.tipo))];
+---
+
+<BaseLayout
+  title="Proyectos — Tu Estudio"
+  description="Portfolio de reformas integrales, diseño de interiores y arquitectura de Tu Estudio en Madrid."
+>
+
+  <!-- Cabecera -->
+  <section class="py-24 px-6 md:px-12 max-w-6xl mx-auto">
+    <p class="text-xs tracking-[0.3em] uppercase text-salvia mb-6 font-light fade-in">Portfolio</p>
+    <h1 class="font-display text-seccion font-light fade-in">Proyectos</h1>
+  </section>
+
+  <!-- Filtros -->
+  <div class="px-6 md:px-12 max-w-6xl mx-auto mb-12">
+    <div class="linea-divisor mb-8"></div>
+    <div class="flex flex-wrap gap-3" id="filtros">
+      {tipos.map((tipo) => (
+        <button
+          data-filter={tipo === 'Todos' ? 'todos' : tipo}
+          class={`filtro-btn text-xs tracking-widest uppercase font-light px-4 py-2 border transition-all duration-200
+                  ${tipo === 'Todos' ? 'border-negro bg-negro text-crema' : 'border-gris-claro text-gris hover:border-negro hover:text-negro'}`}
+        >
+          {tipo}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Grid de proyectos -->
+  <section class="px-6 md:px-12 max-w-6xl mx-auto pb-32">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="proyectos-grid">
+      {proyectos.map((p, i) => (
+        <div
+          data-tipo={p.tipo}
+          class="proyecto-item fade-in"
+          style={`transition-delay: ${i * 0.07}s`}
+        >
+          <ProyectoCard {...p} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+  const btns  = document.querySelectorAll('.filtro-btn');
+  const items = document.querySelectorAll('.proyecto-item');
+
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+
+      // Actualizar botones activos
+      btns.forEach((b) => {
+        b.classList.remove('border-negro', 'bg-negro', 'text-crema');
+        b.classList.add('border-gris-claro', 'text-gris');
+      });
+      btn.classList.add('border-negro', 'bg-negro', 'text-crema');
+      btn.classList.remove('border-gris-claro', 'text-gris');
+
+      // Filtrar tarjetas
+      items.forEach((item) => {
+        const tipo = item.getAttribute('data-tipo');
+        if (filter === 'todos' || tipo === filter) {
+          (item as HTMLElement).style.display = '';
+        } else {
+          (item as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

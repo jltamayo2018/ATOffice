@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+    --color-crema: #F8F7F4;
+    --color-negro: #111111;
+    --color-salvia: #7A8C6E;
+    --color-gris: #888888;
+    --color-gris-claro: #E2E0DA;
+
+    --font-sans: "Inter", sans-serif;
+    --font-display: "Cormorant Garamond", serif;
+}
+
+:root {
+    color-scheme: light;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #F8F7F4;
+    color: #111111;
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+}
+
+::selection {
+    background: #7A8C6E;
+    color: #F8F7F4;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+@layer components {
+    .text-seccion {
+        @apply text-5xl md:text-7xl lg:text-8xl leading-none;
+    }
+
+    .linea-divisor {
+        @apply w-full h-px bg-gris-claro;
+    }
+
+    .fade-in {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .link-menu {
+        @apply text-sm tracking-widest uppercase font-light transition-colors duration-300;
+    }
+
+    .input-form {
+        @apply w-full bg-transparent border-b border-gris-claro py-4 text-sm outline-none focus:border-negro transition-colors duration-300 placeholder:text-gris;
+    }
+}

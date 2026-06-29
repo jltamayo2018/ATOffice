@@ -1,0 +1,37 @@
+---
+const {
+  titulo,
+  tipo,
+  lugar,
+  año,
+  imagen,
+  slug,
+  destacado = false
+} = Astro.props;
+---
+
+<article id={slug} class="group fade-in">
+  <div class={`overflow-hidden bg-gris-claro ${destacado ? 'aspect-[4/5]' : 'aspect-[4/5]'}`}>
+    <img
+      src={imagen}
+      alt={titulo}
+      loading="lazy"
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+    />
+  </div>
+
+  <div class="pt-5">
+    <div class="flex items-center justify-between gap-4 mb-2">
+      <h3 class="font-display text-3xl leading-tight">
+        {titulo}
+      </h3>
+      <span class="text-xs text-gris whitespace-nowrap">
+        {año}
+      </span>
+    </div>
+
+    <p class="text-sm text-gris">
+      {tipo} · {lugar}
+    </p>
+  </div>
+</article>
