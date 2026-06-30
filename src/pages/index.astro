@@ -1,44 +1,43 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero       from '../components/Hero.astro';
-import Servicios  from '../components/Servicios.astro';
-import ProyectoCard from '../components/ProyectoCard.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Servicios from "../components/Servicios.astro";
+import ProyectoCard from "../components/ProyectoCard.astro";
 
 // Proyectos destacados para la home (muestra solo 3)
 const proyectosDestacados = [
   {
-    titulo: 'Piso en Chamberí',
-    tipo: 'Reforma integral',
-    lugar: 'Madrid',
-    año: '2024',
-    imagen: '/images/proyectos/chamberi.jpg',
-    slug: 'piso-chamberi',
+    titulo: "Piso en Chamberí",
+    tipo: "Reforma integral",
+    lugar: "Madrid",
+    año: "2024",
+    imagen: "/images/proyectos/chamberi.jpg",
+    slug: "piso-chamberi",
     destacado: true,
   },
   {
-    titulo: 'Cafetería Miel',
-    tipo: 'Local comercial',
-    lugar: 'Malasaña, Madrid',
-    año: '2023',
-    imagen: '/images/proyectos/cafeteria-miel.jpg',
-    slug: 'cafeteria-miel',
+    titulo: "Cafetería Miel",
+    tipo: "Local comercial",
+    lugar: "Malasaña, Madrid",
+    año: "2023",
+    imagen: "/images/proyectos/cafeteria-miel.jpg",
+    slug: "cafeteria-miel",
   },
   {
-    titulo: 'Casa de campo',
-    tipo: 'Obra nueva',
-    lugar: 'Sierra de Madrid',
-    año: '2023',
-    imagen: '/images/proyectos/casa-campo.jpg',
-    slug: 'casa-campo',
+    titulo: "Casa de campo",
+    tipo: "Obra nueva",
+    lugar: "Sierra de Madrid",
+    año: "2023",
+    imagen: "/images/proyectos/casa-campo.jpg",
+    slug: "casa-campo",
   },
 ];
 ---
 
 <BaseLayout
-  title="Tu Estudio — Arquitectura y Reformas en Madrid"
-  description="Estudio de arquitectura especializado en reformas integrales, diseño de interiores y proyectos sostenibles en Madrid."
+  title="ATOFFICE — Arquitectura e Interiorismo en Madrid"
+  description="Estudio de arquitectura especializado en reformas integrales, diseño de interiores y proyectos llave en mano en Madrid."
 >
-
   <!-- Hero -->
   <Hero />
 
@@ -49,38 +48,48 @@ const proyectosDestacados = [
   <section class="py-24 px-6 md:px-12 max-w-6xl mx-auto">
     <div class="linea-divisor mb-16"></div>
 
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+    <div
+      class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6"
+    >
       <h2 class="font-display text-seccion fade-in">Proyectos</h2>
-      <a href="/proyectos" class="text-sm tracking-widest uppercase text-salvia hover:text-negro transition-colors duration-300 font-light fade-in">
+      <a
+        href="/proyectos"
+        class="text-sm tracking-widest uppercase text-salvia hover:text-negro transition-colors duration-300 font-light fade-in"
+      >
         Ver todos →
       </a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {proyectosDestacados.map((p) => (
-        <ProyectoCard {...p} />
-      ))}
+      {proyectosDestacados.map((p) => <ProyectoCard {...p} />)}
     </div>
   </section>
 
   <!-- Bloque CTA -->
   <section class="py-24 px-6 md:px-12 bg-negro text-crema">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-12">
+    <div
+      class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-12"
+    >
       <div>
         <h2 class="font-display text-seccion font-light leading-tight fade-in">
           ¿Tienes un proyecto<br />en mente?
         </h2>
-        <p class="text-crema/60 font-light mt-4 max-w-sm text-sm leading-relaxed fade-in">
-          Primera reunión sin compromiso. Cuéntanos qué imaginas y estudiamos cómo hacerlo posible.
+        <p
+          class="text-crema/60 font-light mt-4 max-w-sm text-sm leading-relaxed fade-in"
+        >
+          Primera reunión sin compromiso. Cuéntanos qué imaginas y estudiamos
+          cómo hacerlo posible.
         </p>
       </div>
       <div class="fade-in">
-        <a href="/contacto" class="inline-block px-10 py-4 border border-crema text-sm tracking-widest uppercase font-light
-                                   hover:bg-crema hover:text-negro transition-all duration-300">
+        <a
+          href="/contacto"
+          class="inline-block px-10 py-4 border border-crema text-sm tracking-widest uppercase font-light
+                                   hover:bg-crema hover:text-negro transition-all duration-300"
+        >
           Hablemos
         </a>
       </div>
     </div>
   </section>
-
 </BaseLayout>

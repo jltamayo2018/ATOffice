@@ -1,17 +1,19 @@
 ---
-const {
-  titulo,
-  tipo,
-  lugar,
-  año,
-  imagen,
-  slug,
-  destacado = false
-} = Astro.props;
+interface Props {
+  titulo: string;
+  tipo: string;
+  lugar: string;
+  año: string;
+  imagen: string;
+  slug: string;
+  destacado?: boolean;
+}
+
+const { titulo, tipo, lugar, año, imagen, slug } = Astro.props;
 ---
 
 <article id={slug} class="group fade-in">
-  <div class={`overflow-hidden bg-gris-claro ${destacado ? 'aspect-[4/5]' : 'aspect-[4/5]'}`}>
+  <div class="overflow-hidden bg-gris-claro aspect-4/5">
     <img
       src={imagen}
       alt={titulo}
@@ -22,16 +24,13 @@ const {
 
   <div class="pt-5">
     <div class="flex items-center justify-between gap-4 mb-2">
-      <h3 class="font-display text-3xl leading-tight">
+      <h3
+        class="font-display text-3xl leading-tight group-hover:text-salvia transition-colors duration-300"
+      >
         {titulo}
       </h3>
-      <span class="text-xs text-gris whitespace-nowrap">
-        {año}
-      </span>
+      <span class="text-xs text-gris whitespace-nowrap">{año}</span>
     </div>
-
-    <p class="text-sm text-gris">
-      {tipo} · {lugar}
-    </p>
+    <p class="text-sm text-gris">{tipo} · {lugar}</p>
   </div>
 </article>

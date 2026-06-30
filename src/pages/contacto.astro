@@ -1,15 +1,16 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ContactoForm from '../components/ContactoForm.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactoForm from "../components/ContactoForm.astro";
 ---
 
 <BaseLayout
-  title="Contacto — Tu Estudio"
-  description="Contacta con Tu Estudio para reformas integrales, arquitectura, interiorismo y proyectos llave en mano en Madrid."
+  title="Contacto — ATOFFICE"
+  description="Contacta con ATOFFICE, estudio de arquitectura especializado en arquitectura, interiorismo, licencias y dirección de obra en Madrid."
 >
-
   <section class="py-24 px-6 md:px-12 max-w-6xl mx-auto">
-    <p class="text-xs tracking-[0.3em] uppercase text-salvia mb-6 font-light fade-in">
+    <p
+      class="text-xs tracking-[0.3em] uppercase text-salvia mb-6 font-light fade-in"
+    >
       Contacto
     </p>
 
@@ -21,51 +22,84 @@ import ContactoForm from '../components/ContactoForm.astro';
   <section class="px-6 md:px-12 max-w-6xl mx-auto pb-32">
     <div class="linea-divisor mb-16"></div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      <!-- Columna izquierda: datos de contacto -->
       <div class="lg:col-span-5 fade-in">
         <h2 class="font-display text-4xl mb-8">
           Empecemos por una conversación.
         </h2>
 
-        <p class="text-gris leading-relaxed mb-10">
+        <p class="text-gris leading-relaxed mb-12">
           Escríbenos para contarnos tu proyecto. Podemos ayudarte si estás
-          pensando en reformar una vivienda, diseñar un local comercial o
-          desarrollar un proyecto desde cero.
+          pensando en una vivienda, un espacio comercial, una licencia, una
+          reforma o un desarrollo arquitectónico desde cero.
         </p>
 
-        <div class="space-y-6 text-sm">
+        <div class="space-y-10 text-sm">
           <div>
-            <p class="text-xs tracking-widest uppercase text-gris mb-2">Email</p>
-            <a href="mailto:hola@tuestudio.com" class="hover:text-salvia transition-colors">
-              hola@tuestudio.com
-            </a>
+            <p class="text-xs tracking-widest uppercase text-gris mb-3">
+              Mariam Al Hamouti
+            </p>
+
+            <p class="mb-1">Arquitecta</p>
+
+            <p class="text-gris mb-3">
+              Calle del Laurel 14 entreplantas, 28006 Madrid
+            </p>
+
+            <div class="flex flex-col gap-1 text-gris">
+              <a
+                href="mailto:mariamalhamouti@gmail.com"
+                class="hover:text-salvia transition-colors"
+              >
+                mariamalhamouti@gmail.com
+              </a>
+
+              <a
+                href="tel:+34606819677"
+                class="hover:text-salvia transition-colors"
+              >
+                +34 606 81 96 77
+              </a>
+            </div>
           </div>
 
           <div>
-            <p class="text-xs tracking-widest uppercase text-gris mb-2">Teléfono</p>
-            <a href="tel:+34600000000" class="hover:text-salvia transition-colors">
-              +34 600 000 000
-            </a>
-          </div>
+            <p class="text-xs tracking-widest uppercase text-gris mb-3">
+              Cristina Tamayo
+            </p>
 
-          <div>
-            <p class="text-xs tracking-widest uppercase text-gris mb-2">Ubicación</p>
-            <p>Madrid, España</p>
-          </div>
+            <p class="mb-1">Arquitecta</p>
 
-          <div>
-            <p class="text-xs tracking-widest uppercase text-gris mb-2">Instagram</p>
-            <a href="https://www.instagram.com/" target="_blank" class="hover:text-salvia transition-colors">
-              @tuestudio
-            </a>
+            <p class="text-gris mb-3">
+              Calle Ezequiel Solana 8, 1ª, 28017 Madrid
+            </p>
+
+            <div class="flex flex-col gap-1 text-gris">
+              <a
+                href="mailto:cristina.tamayo.diez@gmail.com"
+                class="hover:text-salvia transition-colors"
+              >
+                cristina.tamayo.diez@gmail.com
+              </a>
+
+              <a
+                href="tel:+34655930711"
+                class="hover:text-salvia transition-colors"
+              >
+                +34 655 93 07 11
+              </a>
+
+              <span>Col. 25207</span>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- Columna derecha: formulario -->
       <div class="lg:col-span-7 fade-in">
         <ContactoForm />
       </div>
     </div>
   </section>
-
 </BaseLayout>

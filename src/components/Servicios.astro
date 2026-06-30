@@ -1,25 +1,29 @@
 ---
 const servicios = [
   {
-    numero: '01',
-    titulo: 'Reformas integrales',
-    texto: 'Transformamos viviendas y locales cuidando cada fase: distribución, diseño, licencias, obra y acabados.'
+    numero: "01",
+    titulo: "Reformas integrales",
+    texto:
+      "Transformamos viviendas y locales cuidando cada fase: distribución, diseño, licencias, obra y acabados.",
   },
   {
-    numero: '02',
-    titulo: 'Diseño de interiores',
-    texto: 'Creamos espacios coherentes, funcionales y cálidos, adaptados a la forma de vivir o trabajar de cada cliente.'
+    numero: "02",
+    titulo: "Diseño de interiores",
+    texto:
+      "Creamos espacios coherentes, funcionales y cálidos, adaptados a la forma de vivir o trabajar de cada cliente.",
   },
   {
-    numero: '03',
-    titulo: 'Obra nueva',
-    texto: 'Desarrollamos proyectos desde cero, integrando arquitectura, eficiencia energética y dirección técnica.'
+    numero: "03",
+    titulo: "Obra nueva",
+    texto:
+      "Desarrollamos proyectos desde cero, integrando arquitectura, eficiencia energética y dirección técnica.",
   },
   {
-    numero: '04',
-    titulo: 'Locales comerciales',
-    texto: 'Diseñamos espacios comerciales con identidad propia, pensados para mejorar la experiencia del cliente.'
-  }
+    numero: "04",
+    titulo: "Locales comerciales",
+    texto:
+      "Diseñamos espacios comerciales con identidad propia, pensados para mejorar la experiencia del cliente.",
+  },
 ];
 ---
 
@@ -28,13 +32,13 @@ const servicios = [
 
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
     <div class="lg:col-span-5">
-      <h2 class="font-display text-seccion font-light fade-in">
-        Servicios
-      </h2>
+      <h2 class="font-display text-seccion font-light fade-in">Servicios</h2>
     </div>
 
     <div class="lg:col-span-7">
-      <p class="text-lg md:text-xl leading-relaxed text-gris font-light fade-in">
+      <p
+        class="text-lg md:text-xl leading-relaxed text-gris font-light fade-in"
+      >
         Acompañamos a nuestros clientes durante todo el proceso, combinando
         diseño, técnica y gestión para que cada proyecto avance con claridad,
         control y sentido.
@@ -43,18 +47,18 @@ const servicios = [
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12">
-    {servicios.map((servicio) => (
-      <article class="border-t border-gris-claro py-10 fade-in">
-        <p class="text-xs tracking-widest uppercase text-salvia mb-5">
-          {servicio.numero}
-        </p>
-        <h3 class="font-display text-3xl md:text-4xl mb-5">
-          {servicio.titulo}
-        </h3>
-        <p class="text-sm leading-relaxed text-gris">
-          {servicio.texto}
-        </p>
-      </article>
-    ))}
+    {
+      servicios.map((servicio) => (
+        <article class="border-t border-gris-claro py-10 fade-in">
+          <p class="text-xs tracking-widest uppercase text-salvia mb-5">
+            {servicio.numero}
+          </p>
+          <h3 class="font-display text-3xl md:text-4xl mb-5">
+            {servicio.titulo}
+          </h3>
+          <p class="text-sm leading-relaxed text-gris">{servicio.texto}</p>
+        </article>
+      ))
+    }
   </div>
 </section>
