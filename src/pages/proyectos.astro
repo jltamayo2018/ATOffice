@@ -4,58 +4,36 @@ import ProyectoCard from "../components/ProyectoCard.astro";
 
 const proyectos = [
   {
-    titulo: "Piso en Chamberí",
-    tipo: "Reforma integral",
+    titulo: "BALMIS_BUILDING COMPLEX FOR 9 LUXURY FLATS",
+    tipos: ["License Management"],
     lugar: "Madrid",
-    año: "2024",
-    imagen: "/images/proyectos/chamberi.jpg",
-    slug: "piso-chamberi",
+    año: "2023-2025",
+    imagen: "/images/proyectos/BALMIS_BUILDING_COMPLEX_FOR_9_LUXURY_FLATS.png",
+    slug: "balmis-building-complex-for-9-luxury-flats",
     destacado: true,
   },
   {
-    titulo: "Cafetería Miel",
-    tipo: "Local comercial",
+    titulo: "NBA_BUILDING COMPLEX FOR A 5*HOTEL + SPORT CENTER",
+    tipos: ["License Management"],
     lugar: "Malasaña, Madrid",
-    año: "2023",
-    imagen: "/images/proyectos/cafeteria-miel.jpg",
-    slug: "cafeteria-miel",
+    año: "2023-2025",
+    imagen:
+      "/images/proyectos/NBA_BUILDING_COMPLEX_FOR_A_5_HOTEL_PLUS_SPORT_CENTER.png",
+    slug: "nba-building-complex-for-a-5-hotel-plus-sport-center",
   },
   {
-    titulo: "Casa de campo",
-    tipo: "Obra nueva",
+    titulo: "EZ8_RESIDENTIAL RENOVATION PROJECTS & SITE MANAGEMENT",
+    tipos: ["Construction Management", "Design"],
     lugar: "Sierra de Madrid",
-    año: "2023",
-    imagen: "/images/proyectos/casa-campo.jpg",
-    slug: "casa-campo",
-  },
-  {
-    titulo: "Oficina creativa",
-    tipo: "Diseño de interiores",
-    lugar: "Retiro, Madrid",
-    año: "2023",
-    imagen: "/images/proyectos/oficina.jpg",
-    slug: "oficina-creativa",
-  },
-  {
-    titulo: "Piso en Salamanca",
-    tipo: "Reforma integral",
-    lugar: "Madrid",
-    año: "2022",
-    imagen: "/images/proyectos/salamanca.jpg",
-    slug: "piso-salamanca",
-  },
-  {
-    titulo: "Restaurante Raíz",
-    tipo: "Local comercial",
-    lugar: "La Latina, Madrid",
-    año: "2022",
-    imagen: "/images/proyectos/restaurante-raiz.jpg",
-    slug: "restaurante-raiz",
+    año: "2024-2025",
+    imagen:
+      "/images/proyectos/EZ8_RESIDENTIAL_RENOVATION_PROJECTS_AND_SITE_MANAGEMENT.png",
+    slug: "ez8-residential-renovation-projects-and-site-management",
   },
 ];
 
 // Tipos únicos para el filtro
-const tipos = ["Todos", ...new Set(proyectos.map((p) => p.tipo))];
+const tipos = ["Todos", ...new Set(proyectos.flatMap((p) => p.tipos))];
 ---
 
 <BaseLayout
@@ -99,7 +77,7 @@ const tipos = ["Todos", ...new Set(proyectos.map((p) => p.tipo))];
       {
         proyectos.map((p, i) => (
           <div
-            data-tipo={p.tipo}
+            data-tipos={p.tipos.join("|")}
             class="proyecto-item fade-in"
             style={`transition-delay: ${i * 0.07}s`}
           >
@@ -119,21 +97,22 @@ const tipos = ["Todos", ...new Set(proyectos.map((p) => p.tipo))];
     btn.addEventListener("click", () => {
       const filter = btn.getAttribute("data-filter");
 
-      // Actualizar botones activos
       btns.forEach((b) => {
         b.classList.remove("border-negro", "bg-negro", "text-crema");
         b.classList.add("border-gris-claro", "text-gris");
       });
+
       btn.classList.add("border-negro", "bg-negro", "text-crema");
       btn.classList.remove("border-gris-claro", "text-gris");
 
-      // Filtrar tarjetas
       items.forEach((item) => {
-        const tipo = item.getAttribute("data-tipo");
-        if (filter === "todos" || tipo === filter) {
-          (item as HTMLElement).style.display = "";
+        const itemElement = item as HTMLElement;
+        const tipos = itemElement.getAttribute("data-tipos")?.split("|") || [];
+
+        if (filter === "todos" || tipos.includes(filter || "")) {
+          itemElement.style.display = "";
         } else {
-          (item as HTMLElement).style.display = "none";
+          itemElement.style.display = "none";
         }
       });
     });

@@ -11,9 +11,9 @@ export default {
                 'gris-claro': '#E2E0DA'
             },
             fontFamily: {
-                sans: ['Inter', 'sans-serif'],
-                display: ['Cormorant Garamond', 'serif']
-            }
+                display: ['"Instrument Sans"', 'system-ui', 'sans-serif'], /*títulos*/
+                body: ['"Instrument Sans"', 'system-ui', 'sans-serif'], /*solo para el cuerpo*/
+            },
         }
     },
     plugins: []

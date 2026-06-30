@@ -23,8 +23,9 @@ body {
     margin: 0;
     background: #F8F7F4;
     color: #111111;
-    font-family: "Inter", sans-serif;
-    font-weight: 300;
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-weight: 400; /* Instrument Sans no tiene weight 300, ajusta si lo usabas */
+    /*font-weight: 300;*/
 }
 
 ::selection {

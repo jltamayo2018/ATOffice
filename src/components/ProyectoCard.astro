@@ -1,7 +1,7 @@
 ---
 interface Props {
   titulo: string;
-  tipo: string;
+  tipos: string[];
   lugar: string;
   año: string;
   imagen: string;
@@ -9,7 +9,9 @@ interface Props {
   destacado?: boolean;
 }
 
-const { titulo, tipo, lugar, año, imagen, slug } = Astro.props;
+const { titulo, tipos, lugar, año, imagen, slug } = Astro.props;
+
+const tiposTexto = tipos.join(" · ");
 ---
 
 <article id={slug} class="group fade-in">
@@ -29,8 +31,12 @@ const { titulo, tipo, lugar, año, imagen, slug } = Astro.props;
       >
         {titulo}
       </h3>
+
       <span class="text-xs text-gris whitespace-nowrap">{año}</span>
     </div>
-    <p class="text-sm text-gris">{tipo} · {lugar}</p>
+
+    <p class="text-sm text-gris">
+      {tiposTexto} · {lugar}
+    </p>
   </div>
 </article>
