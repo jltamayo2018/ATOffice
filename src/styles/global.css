@@ -65,4 +65,18 @@ img {
     .input-form {
         @apply w-full bg-transparent border-b border-gris-claro py-4 text-sm outline-none focus:border-negro transition-colors duration-300 placeholder:text-gris;
     }
+
+    /* ESTOS 2 SIGUIENTES BLOQUES SON PARA LA ANIMACIÓN DE LA INTRO*/
+    body.intro-activa main {
+        opacity: 0;
+        transform: translateY(45px);
+    }
+
+    body.intro-finalizada main {
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+            opacity 0.9s ease,
+            transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
 }

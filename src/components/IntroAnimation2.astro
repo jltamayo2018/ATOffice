@@ -1,0 +1,235 @@
+---
+---
+<div
+  id="intro-overlay"
+  aria-hidden="true"
+  style="position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fbfbf8;transition:opacity 0.8s ease;"
+>
+  <svg id="intro-svg" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg"
+       style="width:min(90vw,1100px);height:auto;">
+    <rect width="1200" height="700" fill="#fbfbf8"/>
+
+    <g id="g-fondo" stroke="#cfd6d8" stroke-width="1" fill="none">
+      <path d="M65 620 L1130 640"/><path d="M80 580 L1115 585"/>
+      <path d="M120 120 L1110 470"/><path d="M145 95 L1115 430"/>
+      <path d="M70 520 L290 145"/><path d="M110 535 L330 105"/>
+      <path d="M210 120 L1010 365 L1110 430"/><path d="M180 575 L1060 575"/>
+    </g>
+
+    <polygon id="g-parcela" points="170,500 300,95 1030,360 1125,525 250,590" fill="none" stroke="#9aa5a8" stroke-width="2"/>
+
+    <g id="g-sup" stroke="#c3cbce" stroke-width="1.5" fill="none">
+      <polygon points="360,110 680,210 675,255 320,250"/>
+      <rect x="470" y="190" width="95" height="55"/>
+      <rect x="490" y="170" width="50" height="35"/>
+      <line x1="360" y1="250" x2="675" y2="255"/>
+    </g>
+
+    <g id="g-edificio" stroke="#39484d" stroke-width="3" fill="none">
+      <polygon points="330,300 1035,300 1035,520 330,520"/>
+      <line x1="330" y1="330" x2="1035" y2="330"/>
+      <line x1="330" y1="490" x2="1035" y2="490"/>
+    </g>
+
+    <g id="g-rampas" stroke="#aeb8bb" stroke-width="1.5" fill="none">
+      <path d="M125 360 L190 330 L210 545 L140 510 Z"/>
+      <path d="M105 390 L170 360"/><path d="M115 420 L180 390"/>
+      <path d="M125 450 L190 420"/><path d="M135 480 L200 450"/>
+    </g>
+
+    <g id="g-lateral" stroke="#39484d" stroke-width="3" fill="none">
+      <polygon points="180,330 320,300 330,520 210,545 145,445"/>
+      <polygon points="225,320 315,315 320,435 235,455"/>
+    </g>
+
+    <g id="g-estructura" stroke="#87959a" stroke-width="1.2" fill="none">
+      <line x1="365" y1="300" x2="365" y2="520"/><line x1="430" y1="300" x2="430" y2="520"/>
+      <line x1="495" y1="300" x2="495" y2="520"/><line x1="560" y1="300" x2="560" y2="520"/>
+      <line x1="625" y1="300" x2="625" y2="520"/><line x1="690" y1="300" x2="690" y2="520"/>
+      <line x1="755" y1="300" x2="755" y2="520"/><line x1="820" y1="300" x2="820" y2="520"/>
+      <line x1="885" y1="300" x2="885" y2="520"/><line x1="950" y1="300" x2="950" y2="520"/>
+      <line x1="330" y1="365" x2="1035" y2="365"/><line x1="330" y1="400" x2="1035" y2="400"/>
+      <line x1="330" y1="435" x2="1035" y2="435"/><line x1="330" y1="470" x2="1035" y2="470"/>
+    </g>
+
+    <g id="g-estancias" stroke="#1d2b30" stroke-width="2.5" fill="none">
+      <rect x="240" y="315" width="90" height="120"/>
+      <rect x="250" y="330" width="35" height="75"/>
+      <rect x="290" y="330" width="35" height="45"/>
+      <line x1="240" y1="385" x2="330" y2="385"/>
+      <line x1="285" y1="315" x2="285" y2="435"/>
+      <path d="M285 405 A35 35 0 0 1 320 370"/>
+    </g>
+
+    <g id="g-pista" stroke="#b7c0c3" stroke-width="1" fill="none">
+      <rect x="455" y="330" width="480" height="160"/>
+      <line x1="695" y1="330" x2="695" y2="490"/>
+      <circle cx="695" cy="410" r="45"/><circle cx="695" cy="410" r="8"/>
+      <path d="M455 365 C520 365 520 455 455 455"/>
+      <path d="M935 365 C870 365 870 455 935 455"/>
+      <rect x="455" y="370" width="60" height="80"/>
+      <rect x="875" y="370" width="60" height="80"/>
+    </g>
+
+    <g id="g-nucleo" stroke="#6d7b80" stroke-width="2" fill="none">
+      <rect x="190" y="430" width="75" height="70"/>
+      <rect x="200" y="445" width="25" height="35"/>
+      <rect x="230" y="445" width="25" height="35"/>
+      <path d="M190 500 L265 430"/>
+    </g>
+
+    <g id="g-cotas" stroke="#9aa5a8" stroke-width="1" fill="none">
+      <line x1="330" y1="545" x2="1035" y2="545"/>
+      <line x1="330" y1="535" x2="330" y2="555"/>
+      <line x1="1035" y1="535" x2="1035" y2="555"/>
+      <line x1="1055" y1="300" x2="1055" y2="520"/>
+      <line x1="1045" y1="300" x2="1065" y2="300"/>
+      <line x1="1045" y1="520" x2="1065" y2="520"/>
+    </g>
+
+    <g id="g-norte" transform="translate(1080 95)" stroke="#39484d" fill="none">
+      <line x1="0" y1="50" x2="0" y2="0" stroke-width="2"/>
+      <polygon id="norte-poly" points="0,-12 -7,5 7,5" fill="#39484d" style="opacity:0"/>
+      <text id="norte-txt" x="-5" y="70" font-family="Arial" font-size="14" fill="#39484d" style="opacity:0">N</text>
+    </g>
+
+    <g id="g-puntos" fill="#9aa5a8" stroke="none" style="opacity:0">
+      <circle cx="390" cy="185" r="2"/><circle cx="430" cy="200" r="2"/>
+      <circle cx="470" cy="215" r="2"/><circle cx="520" cy="225" r="2"/>
+      <circle cx="580" cy="235" r="2"/><circle cx="640" cy="245" r="2"/>
+    </g>
+
+    <g id="g-textos" font-family="Arial, sans-serif" font-size="12" fill="#7d8a8e" style="opacity:0">
+      <text x="650" y="565">48.00 m</text>
+      <text x="1070" y="415" transform="rotate(90 1070 415)">15.00 m</text>
+      <text x="460" y="410" fill="#b0b9bc" font-size="42" opacity="0.35">SPORT COURT</text>
+      <text x="215" y="300" font-size="11">ACCESO</text>
+      <text x="245" y="455" font-size="10">SERV.</text>
+    </g>
+
+    <g id="g-cartela" font-family="Arial, sans-serif" fill="#39484d" style="opacity:0">
+      <text x="70" y="665" font-size="16" letter-spacing="3">PLANTA GENERAL · PROYECTO ARQUITECTÓNICO</text>
+      <text x="70" y="685" font-size="10" fill="#7d8a8e">Escala gráfica orientativa</text>
+    </g>
+  </svg>
+
+  <!-- Label inferior -->
+  <p id="intro-label" style="
+    margin-top:2rem;font-family:'Instrument Sans',system-ui,sans-serif;
+    font-size:11px;letter-spacing:0.3em;text-transform:uppercase;
+    color:#9aa5a8;opacity:0;transition:opacity 0.6s ease;
+  ">ATOFFICE · Arquitectura · Madrid</p>
+</div>
+
+<style>
+  .drawable {
+    stroke-dasharray: var(--len, 2000);
+    stroke-dashoffset: var(--len, 2000);
+  }
+  .drawable.drawn {
+    transition: stroke-dashoffset var(--dur, 0.8s) cubic-bezier(0.4, 0, 0.2, 1);
+    stroke-dashoffset: 0;
+  }
+</style>
+
+<script>
+(function () {
+  const overlay = document.getElementById('intro-overlay') as HTMLElement;
+  const label   = document.getElementById('intro-label')   as HTMLElement;
+
+  // Saltar si ya se vio en esta sesión
+  if (sessionStorage.getItem('intro-visto')) {
+    overlay.style.display = 'none';
+    return;
+  }
+
+  document.body.style.overflow = 'hidden';
+
+  // Asigna dasharray dinámico a cada elemento según su tipo
+  function preparar(g: HTMLElement | null, configs: {len: number, dur: number}[]) {
+    if (!g) return;
+    const els = g.querySelectorAll('path, line, polygon, rect, circle, polyline');
+    els.forEach((el, i) => {
+      const cfg = configs[i] || configs[configs.length - 1];
+      (el as HTMLElement).style.setProperty('--len', String(cfg.len));
+      (el as HTMLElement).style.setProperty('--dur', cfg.dur + 's');
+      el.classList.add('drawable');
+    });
+  }
+
+  // Configuraciones por grupo [longitud estimada, duración]
+  preparar(document.getElementById('g-fondo'),      Array(8).fill({len:2000, dur:1.2}));
+  preparar(document.getElementById('g-sup'),        [{len:2000,dur:1.2},{len:400,dur:0.5},{len:280,dur:0.4},{len:400,dur:0.5}]);
+  preparar(document.getElementById('g-edificio'),   [{len:2800,dur:1.6},{len:720,dur:0.7},{len:720,dur:0.7}]);
+  preparar(document.getElementById('g-rampas'),     [{len:800,dur:0.7},{len:200,dur:0.3},{len:200,dur:0.3},{len:200,dur:0.3},{len:200,dur:0.3}]);
+  preparar(document.getElementById('g-lateral'),    [{len:1800,dur:1.2},{len:1200,dur:0.9}]);
+  preparar(document.getElementById('g-estructura'), Array(14).fill({len:500, dur:0.4}));
+  preparar(document.getElementById('g-estancias'),  [{len:500,dur:0.6},{len:280,dur:0.4},{len:230,dur:0.35},{len:100,dur:0.25},{len:130,dur:0.25},{len:200,dur:0.35}]);
+  preparar(document.getElementById('g-pista'),      [{len:1400,dur:0.9},{len:200,dur:0.3},{len:300,dur:0.5},{len:60,dur:0.3},{len:200,dur:0.35},{len:200,dur:0.35},{len:300,dur:0.4},{len:300,dur:0.4}]);
+  preparar(document.getElementById('g-nucleo'),     [{len:320,dur:0.4},{len:140,dur:0.3},{len:140,dur:0.3},{len:130,dur:0.3}]);
+  preparar(document.getElementById('g-cotas'),      Array(6).fill({len:500, dur:0.4}));
+
+  const parcela = document.getElementById('g-parcela') as HTMLElement;
+  if (parcela) { parcela.style.setProperty('--len','3500'); parcela.style.setProperty('--dur','1.8s'); parcela.classList.add('drawable'); }
+
+  const norteLine = document.querySelector('#g-norte line') as HTMLElement;
+  if (norteLine) { norteLine.style.setProperty('--len','70'); norteLine.style.setProperty('--dur','0.4s'); norteLine.classList.add('drawable'); }
+
+  // Secuencia de activación
+  const secuencia = [
+    { id: 'g-fondo',      t: 0    },
+    { id: 'g-parcela',    t: 900  },
+    { id: 'g-sup',        t: 1700 },
+    { id: 'g-edificio',   t: 2500 },
+    { id: 'g-rampas',     t: 3300 },
+    { id: 'g-lateral',    t: 3700 },
+    { id: 'g-estructura', t: 4300 },
+    { id: 'g-estancias',  t: 4900 },
+    { id: 'g-pista',      t: 5300 },
+    { id: 'g-nucleo',     t: 5800 },
+    { id: 'g-cotas',      t: 6100 },
+  ];
+
+  secuencia.forEach(({ id, t }) => {
+    setTimeout(() => {
+      document.getElementById(id)?.querySelectorAll('.drawable').forEach((el, i) => {
+        setTimeout(() => el.classList.add('drawn'), i * 40);
+      });
+    }, t);
+  });
+
+  // Norte y fade-ins finales
+  setTimeout(() => {
+    const nLine = document.querySelector('#g-norte line');
+    nLine?.classList.add('drawn');
+    setTimeout(() => {
+      const poly = document.getElementById('norte-poly') as HTMLElement;
+      const txt  = document.getElementById('norte-txt')  as HTMLElement;
+      if (poly) poly.style.cssText += ';opacity:1;transition:opacity 0.4s ease';
+      if (txt)  txt.style.cssText  += ';opacity:1;transition:opacity 0.4s ease';
+    }, 400);
+  }, 6500);
+
+  setTimeout(() => {
+    const fade = ['g-puntos','g-textos','g-cartela'];
+    fade.forEach((id, i) => {
+      setTimeout(() => {
+        const el = document.getElementById(id) as HTMLElement;
+        if (el) el.style.cssText += ';opacity:1;transition:opacity 0.6s ease';
+      }, i * 200);
+    });
+    if (label) label.style.opacity = '1';
+  }, 6700);
+
+  // Fade out del overlay al finalizar — el usuario también puede hacer clic para saltarlo
+  const salir = () => {
+    overlay.style.opacity = '0';
+    document.body.style.overflow = '';
+    sessionStorage.setItem('intro-visto', '1');
+    setTimeout(() => { overlay.style.display = 'none'; }, 800);
+  };
+
+  setTimeout(salir, 8000);
+  overlay.addEventListener('click', salir);
+})();
+</script>
