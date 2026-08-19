@@ -1,0 +1,177 @@
+---
+import ProjectList from '@/components/ProjectList.astro';
+import ProjectDetail from '@/components/ProjectDetail.astro';
+import { projects } from '@/data/projects';
+
+interface Props {
+  activeSlug?: string;
+}
+
+const { activeSlug } = Astro.props;
+---
+
+<main class:list={['page', 'works', { 'has-selection': Boolean(activeSlug) }]}>
+  <div class="works__list">
+    <ProjectList projects={projects} activeSlug={activeSlug} />
+  </div>
+
+  <div class="works__detail">
+    {projects.map((p) => (
+      <ProjectDetail project={p} active={p.slug === activeSlug} />
+    ))}
+  </div>
+
+  <img data-hover-thumb class="hover-thumb" alt="" />
+</main>
+
+<script>
+  function initWorks() {
+    const root = document.querySelector('.works');
+    if (!root) return;
+
+    const rows = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-slug]'));
+    const details = Array.from(root.querySelectorAll<HTMLElement>('[data-project-detail]'));
+    const thumb = root.querySelector<HTMLImageElement>('[data-hover-thumb]');
+    const closeButtons = Array.from(root.querySelectorAll<HTMLElement>('[data-close-detail]'));
+
+    function setActive(slug: string, pushState: boolean) {
+      let matched = false;
+      details.forEach((d) => {
+        const isMatch = d.dataset.projectDetail === slug;
+        d.classList.toggle('is-active', isMatch);
+        d.setAttribute('aria-hidden', isMatch ? 'false' : 'true');
+        if (isMatch) matched = true;
+      });
+      rows.forEach((r) => r.classList.toggle('is-selected', r.dataset.slug === slug));
+      root.classList.toggle('has-selection', matched);
+      if (pushState) {
+        history.pushState(null, '', matched ? `/works/${slug}` : '/works');
+      }
+      return matched;
+    }
+
+    function clearActive(pushState: boolean) {
+      details.forEach((d) => {
+        d.classList.remove('is-active');
+        d.setAttribute('aria-hidden', 'true');
+      });
+      rows.forEach((r) => r.classList.remove('is-selected'));
+      root.classList.remove('has-selection');
+      if (pushState) history.pushState(null, '', '/works');
+    }
+
+    rows.forEach((row) => {
+      row.addEventListener('click', (e) => {
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        const slug = row.dataset.slug!;
+        if (row.classList.contains('is-selected')) {
+          clearActive(true);
+        } else {
+          setActive(slug, true);
+        }
+      });
+
+      if (thumb) {
+        row.addEventListener('mouseenter', () => {
+          const src = row.dataset.thumbnail;
+          if (!src) return;
+          thumb.src = src;
+          thumb.classList.add('is-visible');
+        });
+        row.addEventListener('mouseleave', () => {
+          thumb.classList.remove('is-visible');
+        });
+      }
+    });
+
+    closeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => clearActive(true));
+    });
+
+    window.addEventListener('popstate', () => {
+      const match = location.pathname.match(/^\/works\/([^/]+)\/?$/);
+      if (match) setActive(match[1], false);
+      else clearActive(false);
+    });
+  }
+
+  document.addEventListener('astro:page-load', initWorks);
+</script>
+
+<style>
+  .works {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  /* Solo se parte en dos columnas cuando hay un proyecto abierto;
+     sin selección, la lista ocupa todo el ancho. El panel de detalle
+     usa --works-panel-w (misma fórmula que la referencia: ancho fijo
+     entre 420px y 40vw), la lista se queda con el resto. */
+  .works.has-selection {
+    grid-template-columns: minmax(0, 1fr) var(--works-panel-w);
+    gap: var(--works-split-gap);
+    align-items: stretch;
+    /* Cada columna scrollea de forma independiente: la altura del bloque
+       queda fija al alto de la pantalla (menos el nav inferior, ya
+       descontado por el padding de .page) y son las columnas, no la
+       página, las que hacen scroll. */
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .works__list,
+  .works__detail {
+    min-width: 0;
+  }
+
+  .works.has-selection .works__list,
+  .works.has-selection .works__detail {
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .hover-thumb {
+    position: fixed;
+    right: var(--content-padding-x);
+    bottom: calc(var(--nav-height) + var(--space-4));
+    width: 240px;
+    aspect-ratio: 5 / 7;
+    object-fit: cover;
+    background: var(--color-bg-alt);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+    z-index: 30;
+  }
+
+  .hover-thumb.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 900px) {
+    .works,
+    .works.has-selection {
+      grid-template-columns: 1fr;
+      height: auto;
+      overflow: visible;
+    }
+
+    .works.has-selection .works__list,
+    .works.has-selection .works__detail {
+      height: auto;
+      overflow-y: visible;
+    }
+
+    .hover-thumb {
+      display: none;
+    }
+  }
+</style>

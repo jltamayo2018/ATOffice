@@ -1,0 +1,79 @@
+---
+import type { Project } from '@/data/projects';
+
+interface Props {
+  projects: Project[];
+  basePath?: string;
+  activeSlug?: string;
+}
+
+const { projects, basePath = '/works', activeSlug } = Astro.props;
+---
+
+<ul class="lista">
+  {projects.map((p) => (
+    <li class="lista__fila">
+      <a
+        href={`${basePath}/${p.slug}`}
+        class:list={['lista__link', { 'is-selected': p.slug === activeSlug }]}
+        data-slug={p.slug}
+        data-thumbnail={p.thumbnail}
+      >
+        <span class="lista__titulo">{p.title}</span>
+        <span class="lista__tipo muted">{p.type.join(' · ')}</span>
+        <span class="lista__anio muted">{p.year}</span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .lista__link {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: baseline;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+  }
+
+  .lista__titulo {
+    font-size: var(--fs-lead);
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .lista__tipo {
+    text-align: left;
+    font-size: var(--fs-nav);
+  }
+
+  .lista__anio {
+    text-align: right;
+    min-width: 6ch;
+    font-size: var(--fs-nav);
+  }
+
+  /* Solo se resalta el texto (negrita), nunca la fila entera */
+  .lista__link:hover .lista__titulo,
+  .lista__link:hover .lista__tipo,
+  .lista__link:hover .lista__anio,
+  .lista__link.is-selected .lista__titulo,
+  .lista__link.is-selected .lista__tipo,
+  .lista__link.is-selected .lista__anio {
+    color: var(--color-text);
+    font-weight: 800;
+  }
+
+  @media (max-width: 640px) {
+    .lista__link {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        'titulo titulo'
+        'tipo anio';
+      row-gap: var(--space-1);
+    }
+    .lista__titulo { grid-area: titulo; }
+    .lista__tipo { grid-area: tipo; text-align: left; }
+    .lista__anio { grid-area: anio; }
+  }
+</style>

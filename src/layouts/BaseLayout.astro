@@ -1,0 +1,39 @@
+---
+import '@/styles/global.css';
+import FooterNav from '@/components/FooterNav.astro';
+import ContactPanel from '@/components/ContactPanel.astro';
+import { ViewTransitions } from 'astro:transitions';
+import { slideUp } from '@/lib/transitions';
+
+interface Props {
+  title: string;
+  description?: string;
+  navOverlay?: boolean;
+}
+
+const {
+  title,
+  description = 'atoffice — architecture, interior design and technical consulting studio.',
+  navOverlay = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} · ATOFFICE</title>
+    <ViewTransitions />
+  </head>
+  <body>
+    <div id="page-content" transition:animate={slideUp}>
+      <slot />
+    </div>
+    <FooterNav overlay={navOverlay} />
+    <ContactPanel />
+  </body>
+</html>

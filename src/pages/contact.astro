@@ -1,0 +1,7 @@
+---
+// El contacto ahora es un panel deslizante sobre la página actual
+// (ver src/components/ContactPanel.astro), no una página aparte.
+// Esta ruta se mantiene solo por compatibilidad con enlaces/bookmarks
+// antiguos a /contact: redirige a la home con el panel abierto.
+return Astro.redirect('/#contact', 301);
+---

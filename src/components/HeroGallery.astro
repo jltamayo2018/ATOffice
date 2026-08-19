@@ -1,0 +1,149 @@
+---
+// Carrusel a pantalla completa (Swiper, open-source/MIT).
+// Para sustituir por las fotos definitivas: cambia únicamente los
+// valores de "src" (y el "alt") de este array. No hay que tocar nada
+// más — ni el layout, ni el CSS, ni index.astro.
+const imagenes = [
+  //{ src: '/mains/main/1-1408x.png', alt: '' },
+  //{ src: '/images/main/2-1408x.png', alt: '' },
+  //{ src: '/images/main/3-1408x.png', alt: '' },
+  //{ src: '/images/main/4-1408x.png', alt: '' },
+  {src: 'images/main/01.jpg', alt: ''},
+  {src: 'images/main/02.jpg', alt: ''},
+  {src: 'images/main/03.jpg', alt: ''},
+  {src: 'images/main/04.jpg', alt: ''},
+];
+---
+
+<div class="hero-swiper" id="heroSwiper">
+  <div class="swiper-wrapper">
+    {imagenes.map((img) => (
+      <div class="swiper-slide">
+        <img src={img.src} alt={img.alt} loading="eager" />
+      </div>
+    ))}
+  </div>
+  <button class="hero-nav prev" id="heroPrev" type="button" aria-label="Previous"></button>
+  <button class="hero-nav next" id="heroNext" type="button" aria-label="Next"></button>
+</div>
+
+<style>
+  .hero-swiper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Velo claro en la base para que el nav (texto oscuro) se lea
+     siempre, sea cual sea el tono de la imagen de fondo. */
+  .hero-swiper::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 120px;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* Mismo velo arriba, para que el manifiesto se lea superpuesto
+     a las imágenes. */
+  .hero-swiper::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 200px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .hero-swiper :global(.swiper-wrapper),
+  .hero-swiper :global(.swiper-slide) {
+    height: 100%;
+  }
+
+  .hero-swiper :global(.swiper-slide) img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Zonas de navegación a pantalla completa: cada mitad del hero es
+     clicable (izquierda = anterior, derecha = siguiente), sin ningún
+     indicador visual, igual que la referencia. z-index por debajo del
+     manifiesto (z-index 6 en index.astro) para que el texto siga
+     siendo seleccionable donde se solapan. */
+  .hero-nav {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 4;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .hero-nav.prev {
+    left: 0;
+  }
+
+  .hero-nav.next {
+    right: 0;
+  }
+
+  @media (max-width: 812px) and (orientation: portrait) {
+    .hero-nav {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import Swiper from 'swiper';
+  import 'swiper/css';
+
+  // Con View Transitions (astro:transitions), esta página puede
+  // "volver a mostrarse" vía navegación por cliente sin una recarga
+  // completa. Astro no vuelve a ejecutar este script de forma fiable
+  // en cada visita, así que inicializamos en "astro:page-load" (se
+  // dispara siempre, incluida la primera carga) y destruimos
+  // cualquier instancia previa antes de crear una nueva, por si acaso.
+  function initHeroSwiper() {
+    const el = document.getElementById('heroSwiper');
+    if (!el) return;
+
+    if ((el as any).swiper) {
+      (el as any).swiper.destroy(true, true);
+    }
+
+    const swiper = new Swiper(el, {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      speed: 500,
+      loop: true,
+      breakpoints: {
+        640: { slidesPerView: 2 },
+        1000: { slidesPerView: 3 },
+      },
+    });
+
+    // Con loop:true, Swiper duplica slides por debajo para que
+    // slideNext()/slidePrev() siempre animen en su dirección natural
+    // (de la última a la primera se desliza hacia la izquierda, no
+    // "hacia atrás").
+    document.getElementById('heroNext')?.addEventListener('click', () => {
+      swiper.slideNext();
+    });
+
+    document.getElementById('heroPrev')?.addEventListener('click', () => {
+      swiper.slidePrev();
+    });
+  }
+
+  document.addEventListener('astro:page-load', initHeroSwiper);
+</script>

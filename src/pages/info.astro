@@ -1,0 +1,255 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const members = [
+  { name: 'Mariam Alhamouti', role: 'Founder' },
+  { name: 'Cristina Tamayo', role: 'Founder' },
+];
+
+// Bios de marcador — sustituir por el texto definitivo del estudio.
+const team = [
+  {
+    initials: 'MA',
+    name: 'Mariam Alhamouti',
+    bio: 'Co-founder of atoffice, leading design development across residential and hospitality projects, from concept to spatial definition.',
+  },
+  {
+    initials: 'CT',
+    name: 'Cristina Tamayo',
+    bio: 'Co-founder of atoffice, overseeing technical delivery and construction direction, coordinating disciplines from licence to completion.',
+  },
+];
+
+const services = [
+  {
+    title: 'Residential',
+    description:
+      'New-build homes, full renovations, and building rehabilitations — from concept through construction documentation.',
+  },
+  {
+    title: 'Wellness & Hospitality',
+    description:
+      'Boutique hospitality environments designed around user experience, operational flow, and brand identity.',
+  },
+  {
+    title: 'Interior Design',
+    description:
+      'Integrated within the architectural process — material specification, lighting strategy, and custom detailing.',
+  },
+];
+---
+
+<BaseLayout
+  title="Info"
+  description="atoffice is a practice operating between architecture, interior design, and the city, with research as our guiding thread."
+>
+  <main class="page info">
+    <section class="info__about">
+      <h1 class="label muted">About</h1>
+      <p class="info__texto">
+        atoffice is a practice operating between architecture, interior
+        design, and the city, with research as our guiding thread. We
+        approach architecture as process: a sequence of deliberate choices
+        where conceptual clarity and technical precision are placed in
+        service of tangible spatial experience. We design with care and
+        exigency, seeking solutions that are sober, coherent, and
+        constructible.
+      </p>
+      <p class="info__texto">
+        Our approach is built on crossing disciplines and references without
+        hierarchy: the technical and the cultural, the domestic and the
+        urban, detail and strategy. We seek to identify connections, simplify
+        complexity, and find a specific language for each project, without
+        repeating formulas.
+      </p>
+    </section>
+
+    <section class="info__workscope">
+      <h2 class="label muted">Scope of work</h2>
+      <p class="info__texto">
+        Specialized in residential, wellness, and hospitality spaces.
+        Interior design is integrated within the architectural process —
+        material specification, lighting strategy, and custom detailing.
+      </p>
+    </section>
+
+    <section class="info__members">
+      <h2 class="label muted">Members</h2>
+      <ul class="info__miembros">
+        {members.map((person) => <li>{person.name}</li>)}
+      </ul>
+    </section>
+
+    <section class="info__team">
+      <h2 class="label muted">Team</h2>
+      <div class="info__equipo">
+        {team.map((person) => (
+          <div class="info__persona">
+            <div class="info__persona-cabecera">
+              <span class="info__iniciales">{person.initials}</span>
+              <span class="info__nombre">{person.name}</span>
+            </div>
+            <p class="info__bio muted">{person.bio}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="info__service">
+      <h2 class="label muted">Service</h2>
+      <div class="info__servicios">
+        {services.map((service) => (
+          <div class="info__servicio">
+            <span class="info__servicio-titulo">{service.title}</span>
+            <p class="info__servicio-desc muted">{service.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <figure class="info__figura">
+      <img src="/images/projects/balmis/cover.jpg" alt="" loading="lazy" />
+    </figure>
+  </main>
+</BaseLayout>
+
+<style>
+  .info {
+    display: grid;
+    grid-template-columns:
+      minmax(120px, 0.7fr) minmax(220px, 1.6fr)
+      minmax(140px, 0.7fr) minmax(240px, 1.8fr);
+    grid-template-areas:
+      'about   about   workscope workscope'
+      'members team    service   figura';
+    column-gap: var(--space-5);
+    row-gap: var(--space-7);
+    align-items: start;
+  }
+
+  .info__about {
+    grid-area: about;
+  }
+
+  .info__workscope {
+    grid-area: workscope;
+  }
+
+  .info__members {
+    grid-area: members;
+  }
+
+  .info__team {
+    grid-area: team;
+  }
+
+  .info__service {
+    grid-area: service;
+  }
+
+  .info__figura {
+    grid-area: figura;
+  }
+
+  .info__about,
+  .info__workscope,
+  .info__members,
+  .info__team,
+  .info__service {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .info__about .info__texto,
+  .info__workscope .info__texto {
+    max-width: 56ch;
+  }
+
+  .info__texto {
+    font-size: var(--fs-body);
+  }
+
+  .info__miembros {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .info__miembros li {
+    font-size: var(--fs-body);
+  }
+
+  .info__equipo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .info__persona {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .info__persona-cabecera {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .info__iniciales {
+    font-size: var(--fs-nav);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-muted);
+  }
+
+  .info__nombre {
+    font-weight: 800;
+  }
+
+  .info__bio {
+    font-size: var(--fs-body);
+  }
+
+  .info__servicios {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .info__servicio {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .info__servicio-titulo {
+    font-weight: 800;
+  }
+
+  .info__servicio-desc {
+    font-size: var(--fs-body);
+  }
+
+  .info__figura img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 800px) {
+    .info {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'about'
+        'members'
+        'team'
+        'workscope'
+        'service'
+        'figura';
+      row-gap: var(--space-6);
+    }
+  }
+</style>

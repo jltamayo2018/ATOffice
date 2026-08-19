@@ -1,0 +1,192 @@
+---
+const contacts = [
+  { name: 'Mariam Alhamouti', phone: '+34 606 819 677' },
+  { name: 'Cristina Tamayo', phone: '+34 655 930 711' },
+];
+---
+
+<aside
+  id="contact-panel"
+  class="contact-panel"
+  aria-hidden="true"
+  aria-labelledby="contact-panel-title"
+>
+  <button
+    type="button"
+    class="contact-panel__close label muted"
+    data-contact-close
+    aria-label="Close contact panel"
+  >
+    Close
+  </button>
+
+  <div class="contact-panel__body">
+    <p class="contact-panel__texto">
+      Get in touch — for collaborations, inquiries, or information, we'd be
+      glad to hear from you.
+    </p>
+
+    <a class="contact-panel__web" href="https://www.atoffice.es">
+      www.atoffice.es
+    </a>
+
+    <ul class="contact-panel__lista">
+      {contacts.map((c) => (
+        <li>
+          <span class="contact-panel__nombre">{c.name}</span>
+          <a class="muted" href={`tel:${c.phone.replace(/\s/g, '')}`}>
+            {c.phone}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</aside>
+
+<script>
+  function initContactPanel() {
+    const panel = document.getElementById('contact-panel');
+    if (!panel) return;
+
+    const openTriggers = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-contact-open]')
+    );
+    const closeTriggers = Array.from(
+      panel.querySelectorAll<HTMLElement>('[data-contact-close]')
+    );
+
+    const isOpen = () => document.body.classList.contains('contact-open');
+
+    function setActiveTriggers(active: boolean) {
+      openTriggers.forEach((btn) => btn.classList.toggle('is-active', active));
+    }
+
+    function open(pushState = true) {
+      if (isOpen()) return;
+      document.body.classList.add('contact-open');
+      panel.setAttribute('aria-hidden', 'false');
+      setActiveTriggers(true);
+      if (pushState) {
+        history.pushState(null, '', location.pathname + location.search + '#contact');
+      }
+      document.addEventListener('keydown', onKeydown);
+      document.addEventListener('click', onDocumentClick, true);
+    }
+
+    function close(pushState = true) {
+      if (!isOpen()) return;
+      document.body.classList.remove('contact-open');
+      panel.setAttribute('aria-hidden', 'true');
+      setActiveTriggers(false);
+      if (pushState) {
+        history.pushState(null, '', location.pathname + location.search);
+      }
+      document.removeEventListener('keydown', onKeydown);
+      document.removeEventListener('click', onDocumentClick, true);
+    }
+
+    function onKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') close();
+    }
+
+    function onDocumentClick(e: MouseEvent) {
+      const target = e.target as HTMLElement;
+      if (panel.contains(target) || target.closest('[data-contact-open]')) return;
+      close();
+    }
+
+    openTriggers.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        isOpen() ? close() : open();
+      });
+    });
+
+    closeTriggers.forEach((btn) => {
+      btn.addEventListener('click', () => close());
+    });
+
+    // Enlace directo o recarga con el panel abierto (p. ej. /#contact,
+    // o la redirección desde la antigua ruta /contact).
+    if (location.hash === '#contact') {
+      open(false);
+    }
+  }
+
+  document.addEventListener('astro:page-load', initContactPanel);
+</script>
+
+<style>
+  .contact-panel {
+    position: fixed;
+    inset: 0 0 0 auto;
+    z-index: 40;
+    width: min(480px, 90vw);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    background: var(--color-bg);
+    border-left: 1px solid var(--color-border);
+    padding: var(--space-6) var(--content-padding-x)
+      calc(var(--nav-height) + var(--space-5));
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  :global(body.contact-open) .contact-panel {
+    transform: translateX(0);
+  }
+
+  .contact-panel__close {
+    align-self: flex-end;
+    transition: color var(--transition-fast);
+  }
+
+  .contact-panel__close:hover {
+    color: var(--color-text);
+  }
+
+  .contact-panel__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .contact-panel__texto {
+    font-size: var(--fs-lead);
+  }
+
+  .contact-panel__web {
+    font-size: var(--fs-h2);
+    font-weight: 800;
+  }
+
+  .contact-panel__web:hover {
+    text-decoration: underline;
+  }
+
+  .contact-panel__lista {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .contact-panel__lista li {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--color-border-soft);
+    padding-top: var(--space-2);
+  }
+
+  .contact-panel__nombre {
+    font-weight: 800;
+  }
+
+  @media (max-width: 640px) {
+    .contact-panel {
+      width: 100vw;
+      border-left: none;
+    }
+  }
+</style>

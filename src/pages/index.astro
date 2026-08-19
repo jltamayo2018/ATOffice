@@ -1,0 +1,44 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProjectList from "@/components/ProjectList.astro";
+import HeroGallery from "@/components/HeroGallery.astro";
+import { featuredProjects } from "@/data/projects";
+---
+
+<BaseLayout title="Home" navOverlay>
+  <div class="hero-screen">
+    <div class="hero-screen__gallery">
+      <HeroGallery />
+    </div>
+
+    <p class="hero-screen__manifiesto">
+      atoffice is a practice operating between architecture, interior design,
+      and the city, with research as our guiding thread. We approach
+      architecture as process: a sequence of deliberate choices where conceptual
+      clarity and technical precision are placed in service of tangible spatial
+      experience. We design with care and exigency, seeking solutions that are
+      sober, coherent, and constructible.
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero-screen {
+    position: relative;
+    height: 100svh;
+  }
+
+  .hero-screen__gallery {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-screen__manifiesto {
+    position: absolute;
+    inset: 0 0 auto 0;
+    z-index: 6;
+    padding: var(--space-4) var(--content-padding-x);
+    font-size: var(--fs-lead);
+    line-height: var(--lh-body);
+  }
+</style>

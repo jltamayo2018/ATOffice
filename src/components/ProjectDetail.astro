@@ -1,0 +1,114 @@
+---
+import type { Project } from '@/data/projects';
+
+interface Props {
+  project: Project;
+  active?: boolean;
+}
+
+const { project, active = false } = Astro.props;
+---
+
+<article
+  class:list={['detail', { 'is-active': active }]}
+  data-project-detail={project.slug}
+  aria-hidden={active ? 'false' : 'true'}
+>
+  <button type="button" class="detail__close label muted" data-close-detail>
+    Close
+  </button>
+
+  <header class="detail__cabecera">
+    <h2 class="detail__titulo">{project.title}</h2>
+    <dl class="detail__meta">
+      <div>
+        <dt class="label muted">Type</dt>
+        <dd>{project.type.join(' · ')}</dd>
+      </div>
+      <div>
+        <dt class="label muted">Location</dt>
+        <dd>{project.location}</dd>
+      </div>
+      <div>
+        <dt class="label muted">Year</dt>
+        <dd>{project.year}</dd>
+      </div>
+      <div>
+        <dt class="label muted">Client</dt>
+        <dd>{project.client}</dd>
+      </div>
+      <div>
+        <dt class="label muted">Phase</dt>
+        <dd>{project.phase.join(' · ')}</dd>
+      </div>
+    </dl>
+  </header>
+
+  <p class="detail__descripcion">{project.description}</p>
+
+  <img
+    class="detail__imagen"
+    src={project.image}
+    alt={project.title}
+    loading="lazy"
+  />
+</article>
+
+<style>
+  .detail {
+    display: none;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .detail.is-active {
+    display: flex;
+  }
+
+  .detail__close {
+    align-self: flex-end;
+    transition: color var(--transition-fast);
+  }
+
+  .detail__close:hover {
+    color: var(--color-text);
+  }
+
+  .detail__cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-4);
+    border-bottom: 1px solid var(--color-border-soft);
+    padding-bottom: var(--space-4);
+  }
+
+  .detail__titulo {
+    font-size: var(--fs-h2);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .detail__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+  }
+
+  .detail__meta dt {
+    margin-bottom: var(--space-1);
+  }
+
+  .detail__descripcion {
+    max-width: 60ch;
+    font-size: var(--fs-lead);
+  }
+
+  .detail__imagen {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    background: var(--color-bg-alt);
+  }
+</style>

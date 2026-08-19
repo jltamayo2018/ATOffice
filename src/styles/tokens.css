@@ -1,0 +1,65 @@
+/* ============================================
+   ATOFFICE — Design tokens
+   Fuente única de verdad para color, tipografía
+   y espaciado. No definir valores "a mano" en
+   los componentes: usar siempre estas variables.
+   ============================================ */
+
+:root {
+  /* Color */
+  --color-bg: #ffffff;
+  --color-bg-alt: #f3efe4;      /* panel crema (overlays, hover de fila) */
+  --color-bg-invert: #111111;
+  --color-text: #111111;
+  --color-text-muted: #9a9a9a;  /* elementos inactivos / secundarios */
+  --color-text-invert: #ffffff;
+  --color-border: #111111;
+  --color-border-soft: #dcdcdc;
+
+  /* Tipografía */
+  --font-sans: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Helvetica, Arial, sans-serif;
+
+  --fs-nav: 0.8rem;
+  --fs-body: 0.95rem;
+  --fs-lead: 1.15rem;
+  --fs-h2: clamp(1.5rem, 2vw, 2rem);
+  --fs-h1: clamp(2.5rem, 8vw, 7rem);
+
+  --tracking-tight: -0.01em;
+  --tracking-wide: 0.04em;
+  --lh-body: 1.5;
+  --lh-tight: 1.1;
+
+  /* Espaciado */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+  --space-6: 64px;
+  --space-7: 96px;
+
+  /* Layout */
+  --nav-height: 52px;
+  --content-padding-x: clamp(16px, 3vw, 32px);
+  --max-width: 1600px;
+
+  /* Retícula: N columnas repartidas en el ancho de la ventana, con
+     el mismo padding lateral que el resto del sitio (--content-padding-x)
+     y un gap fijo entre columnas. --grid-col da el ancho de 1 columna;
+     para un elemento de N columnas: calc(var(--grid-col) * N + var(--grid-gap) * (N - 1)). */
+  --grid-cols: 14;
+  --grid-gap: 12px;
+  --grid-col: calc(
+    (100vw - (var(--content-padding-x) * 2) - (var(--grid-gap) * (var(--grid-cols) - 1))) /
+      var(--grid-cols)
+  );
+
+  /* Works: proporción lista/detalle cuando hay un proyecto abierto */
+  --works-split-gap: clamp(24px, 6vw, 114px);
+  --works-panel-w: minmax(420px, 40vw);
+
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+}
