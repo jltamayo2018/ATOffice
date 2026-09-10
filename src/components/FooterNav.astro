@@ -122,11 +122,11 @@ const esHref = withLang('es', pathWithoutLang);
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
     color: var(--color-text-muted);
+    font-weight: 700;
     transition: color var(--transition-fast), background-color var(--transition-fast);
   }
 
   .footer-nav__brand {
-    font-weight: 800;
     font-size: var(--fs-nav);
     letter-spacing: var(--tracking-wide);
   }
@@ -137,13 +137,12 @@ const esHref = withLang('es', pathWithoutLang);
     color: var(--color-text);
   }
 
-  /* Activo: mismo chip, sin invertir a negro — solo texto oscuro y
-     negrita, igual criterio que el hover pero permanente. */
+  /* Activo: mismo chip, sin invertir a negro — solo texto oscuro,
+     igual criterio que el hover pero permanente. */
   .footer-nav__brand.is-active,
   .footer-nav__link.is-active {
     background: var(--color-chip-bg-hover);
     color: var(--color-text);
-    font-weight: 800;
   }
 
   .footer-nav__lang {
@@ -155,7 +154,6 @@ const esHref = withLang('es', pathWithoutLang);
 
   .footer-nav__lang .is-active {
     color: var(--color-text);
-    font-weight: 600;
   }
 
   .footer-nav__lang a {

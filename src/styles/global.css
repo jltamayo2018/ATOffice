@@ -1,10 +1,5 @@
 @import './tokens.css';
-
-/* Google Fonts — Archivo (open source, SIL OFL, gratuita para uso comercial).
-   Elegida como alternativa a "SN Skandia" (fuente de pago de Skriftkompani
-   usada en la web de referencia): misma familia de grotesca geométrica
-   neutra. */
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap');
+@import './fonts.css';
 
 *,
 *::before,

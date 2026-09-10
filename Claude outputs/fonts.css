@@ -1,0 +1,27 @@
+/* Instrument Sans — Google Fonts (SIL Open Font License 1.1, gratuita
+   para uso comercial). Autoalojada en public/fonts/instrument-sans/ en
+   vez de cargarla desde fonts.googleapis.com: una petición externa menos
+   y no depende de que Google Fonts esté disponible.
+
+   Son fuentes variables (un único archivo cubre todo el eje de peso), así
+   que basta con dos @font-face — normal e italic — para toda la familia.
+   El eje "wght" de Instrument Sans va de 400 a 700 (no incluye 800/900):
+   los "font-weight: 800" que ya existían en el sitio se siguen sirviendo
+   con el 700, el más grueso disponible, sin negrita sintética.
+
+   Licencia completa en public/fonts/instrument-sans/OFL.txt. */
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/fonts/instrument-sans/InstrumentSans-Variable.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/fonts/instrument-sans/InstrumentSans-Italic-Variable.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: italic;
+  font-display: swap;
+}

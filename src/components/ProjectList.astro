@@ -58,7 +58,7 @@ const { projects, basePath = '/works', activeSlug, lang = 'en' } = Astro.props;
     min-width: 6ch;
   }
 
-  /* Solo se resalta el texto (negrita), nunca la fila entera */
+  /* Solo se resalta el texto, nunca la fila entera */
   .lista__link:hover .lista__titulo,
   .lista__link:hover .lista__tipo,
   .lista__link:hover .lista__anio,
@@ -66,7 +66,7 @@ const { projects, basePath = '/works', activeSlug, lang = 'en' } = Astro.props;
   .lista__link.is-selected .lista__tipo,
   .lista__link.is-selected .lista__anio {
     color: var(--color-text);
-    font-weight: 800;
+    font-weight: 700;
   }
 
   @media (max-width: 640px) {
