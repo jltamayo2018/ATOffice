@@ -125,3 +125,30 @@ body.contact-open #page-content {
   opacity: 0.5;
   pointer-events: none;
 }
+
+/* Utilidad: revelado "blur-up" para <img>. Arranca ligeramente desenfocada
+   y ampliada y, en cuanto termina de cargar (ver src/lib/img-reveal.ts,
+   que añade "is-loaded"), se enfoca y asienta a tamaño real. Puramente
+   CSS/JS, sin librería externa ni placeholders generados en build. */
+.img-reveal {
+  filter: blur(18px);
+  transform: scale(1.04);
+  opacity: 0;
+  transition: filter var(--transition-slow), transform var(--transition-slow),
+    opacity var(--transition-base);
+}
+
+.img-reveal.is-loaded {
+  filter: blur(0);
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Si el usuario prefiere menos movimiento, se muestra sin animar */
+@media (prefers-reduced-motion: reduce) {
+  .img-reveal {
+    filter: none;
+    transform: none;
+    transition: opacity var(--transition-base);
+  }
+}

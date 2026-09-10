@@ -1,168 +1,78 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { infoContent, type Lang } from '@/i18n/translations';
 
-const members = [
-  { name: 'Mariam Alhamouti', role: 'Founder' },
-  { name: 'Cristina Tamayo', role: 'Founder' },
-];
+interface Props {
+  lang?: Lang;
+}
 
-// Bios de marcador — sustituir por el texto definitivo del estudio.
-const team = [
-  {
-    initials: 'MA',
-    name: 'Mariam Alhamouti',
-    bio: 'Co-founder of atoffice, leading design development across residential and hospitality projects, from concept to spatial definition.',
-  },
-  {
-    initials: 'CT',
-    name: 'Cristina Tamayo',
-    bio: 'Co-founder of atoffice, overseeing technical delivery and construction direction, coordinating disciplines from licence to completion.',
-  },
-];
+const { lang = 'en' } = Astro.props;
+const content = infoContent[lang];
 
-const services = [
-  {
-    title: 'Residential',
-    description:
-      'New-build homes, full renovations, and building rehabilitations — from concept through construction documentation.',
-  },
-  {
-    title: 'Wellness & Hospitality',
-    description:
-      'Boutique hospitality environments designed around user experience, operational flow, and brand identity.',
-  },
-  {
-    title: 'Interior Design',
-    description:
-      'Integrated within the architectural process — material specification, lighting strategy, and custom detailing.',
-  },
-];
+const pageTitle = lang === 'es' ? 'Estudio' : 'Info';
 ---
 
-<BaseLayout
-  title="Info"
-  description="atoffice is a practice operating between architecture, interior design, and the city, with research as our guiding thread."
->
+<BaseLayout title={pageTitle} lang={lang}>
   <main class="page info">
-    <section class="info__about">
-      <h1 class="label muted">About</h1>
-      <p class="info__texto">
-        atoffice is a practice operating between architecture, interior
-        design, and the city, with research as our guiding thread. We
-        approach architecture as process: a sequence of deliberate choices
-        where conceptual clarity and technical precision are placed in
-        service of tangible spatial experience. We design with care and
-        exigency, seeking solutions that are sober, coherent, and
-        constructible.
-      </p>
-      <p class="info__texto">
-        Our approach is built on crossing disciplines and references without
-        hierarchy: the technical and the cultural, the domestic and the
-        urban, detail and strategy. We seek to identify connections, simplify
-        complexity, and find a specific language for each project, without
-        repeating formulas.
-      </p>
-    </section>
+    <div class="info__col info__col--left">
+      <section class="info__about">
+        <h1 class="label">{content.aboutLabel}</h1>
+        <p class="info__texto">{content.aboutText}</p>
+      </section>
 
-    <section class="info__workscope">
-      <h2 class="label muted">Scope of work</h2>
-      <p class="info__texto">
-        Specialized in residential, wellness, and hospitality spaces.
-        Interior design is integrated within the architectural process —
-        material specification, lighting strategy, and custom detailing.
-      </p>
-    </section>
-
-    <section class="info__members">
-      <h2 class="label muted">Members</h2>
-      <ul class="info__miembros">
-        {members.map((person) => <li>{person.name}</li>)}
-      </ul>
-    </section>
-
-    <section class="info__team">
-      <h2 class="label muted">Team</h2>
-      <div class="info__equipo">
-        {team.map((person) => (
-          <div class="info__persona">
-            <div class="info__persona-cabecera">
-              <span class="info__iniciales">{person.initials}</span>
-              <span class="info__nombre">{person.name}</span>
+      <section class="info__service">
+        <h2 class="label">{content.servicesLabel}</h2>
+        <div class="info__servicios">
+          {content.services.map((service) => (
+            <div class="info__servicio">
+              <span class="info__servicio-titulo">{service.title}</span>
+              <p class="info__servicio-desc muted">{service.body}</p>
             </div>
-            <p class="info__bio muted">{person.bio}</p>
-          </div>
-        ))}
-      </div>
-    </section>
+          ))}
+        </div>
+      </section>
+    </div>
 
-    <section class="info__service">
-      <h2 class="label muted">Service</h2>
-      <div class="info__servicios">
-        {services.map((service) => (
-          <div class="info__servicio">
-            <span class="info__servicio-titulo">{service.title}</span>
-            <p class="info__servicio-desc muted">{service.description}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <figure class="info__figura">
-      <img src="/images/projects/balmis/cover.jpg" alt="" loading="lazy" />
-    </figure>
+    <div class="info__col info__col--right">
+      <section class="info__process">
+        <h2 class="label">{content.processLabel}</h2>
+        <p class="info__texto">{content.processText}</p>
+        <img
+          class="info__diagrama"
+          src="/images/studio/proceso-diagrama.png"
+          alt={content.processLabel}
+          loading="lazy"
+        />
+      </section>
+    </div>
   </main>
 </BaseLayout>
 
 <style>
   .info {
     display: grid;
-    grid-template-columns:
-      minmax(120px, 0.7fr) minmax(220px, 1.6fr)
-      minmax(140px, 0.7fr) minmax(240px, 1.8fr);
-    grid-template-areas:
-      'about   about   workscope workscope'
-      'members team    service   figura';
+    grid-template-columns: 1fr 1fr;
     column-gap: var(--space-5);
-    row-gap: var(--space-7);
     align-items: start;
+    padding-top: var(--space-2);
   }
 
-  .info__about {
-    grid-area: about;
-  }
-
-  .info__workscope {
-    grid-area: workscope;
-  }
-
-  .info__members {
-    grid-area: members;
-  }
-
-  .info__team {
-    grid-area: team;
-  }
-
-  .info__service {
-    grid-area: service;
-  }
-
-  .info__figura {
-    grid-area: figura;
+  .info__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
   }
 
   .info__about,
-  .info__workscope,
-  .info__members,
-  .info__team,
+  .info__process,
   .info__service {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-2);
   }
 
   .info__about .info__texto,
-  .info__workscope .info__texto {
+  .info__process .info__texto {
     max-width: 56ch;
   }
 
@@ -170,52 +80,17 @@ const services = [
     font-size: var(--fs-body);
   }
 
-  .info__miembros {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-  }
-
-  .info__miembros li {
-    font-size: var(--fs-body);
-  }
-
-  .info__equipo {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .info__persona {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-  }
-
-  .info__persona-cabecera {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-2);
-  }
-
-  .info__iniciales {
-    font-size: var(--fs-nav);
-    letter-spacing: var(--tracking-wide);
-    color: var(--color-text-muted);
-  }
-
-  .info__nombre {
-    font-weight: 800;
-  }
-
-  .info__bio {
-    font-size: var(--fs-body);
+  .info__diagrama {
+    width: 100%;
+    max-width: 360px;
+    margin-top: var(--space-2);
+    border: 1px solid var(--color-border-soft);
   }
 
   .info__servicios {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-2);
   }
 
   .info__servicio {
@@ -230,25 +105,12 @@ const services = [
 
   .info__servicio-desc {
     font-size: var(--fs-body);
-  }
-
-  .info__figura img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 2px;
+    max-width: 60ch;
   }
 
   @media (max-width: 800px) {
     .info {
       grid-template-columns: 1fr;
-      grid-template-areas:
-        'about'
-        'members'
-        'team'
-        'workscope'
-        'service'
-        'figura';
       row-gap: var(--space-6);
     }
   }

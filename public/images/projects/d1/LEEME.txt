@@ -1,0 +1,10 @@
+Coloca aquí las imágenes de este proyecto:
+
+- cover.jpg      -> imagen de portada (se usa en la ficha del proyecto en Works)
+- miniatura.jpg  -> imagen vertical (aparece al pasar el ratón sobre la fila en el listado de Works)
+
+Una vez añadidas las imágenes, edita src/data/projects.ts:
+1. Rellena "description" (inglés) y "descriptionEs" (español) con el texto del proyecto.
+2. Cambia "hasContent: false" a "hasContent: true".
+
+Este archivo (LEEME.txt) se puede borrar cuando el proyecto esté listo.

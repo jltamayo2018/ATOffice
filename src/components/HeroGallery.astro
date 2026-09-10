@@ -4,14 +4,10 @@
 // valores de "src" (y el "alt") de este array. No hay que tocar nada
 // más — ni el layout, ni el CSS, ni index.astro.
 const imagenes = [
-  //{ src: '/mains/main/1-1408x.png', alt: '' },
-  //{ src: '/images/main/2-1408x.png', alt: '' },
-  //{ src: '/images/main/3-1408x.png', alt: '' },
-  //{ src: '/images/main/4-1408x.png', alt: '' },
-  {src: 'images/main/01.jpg', alt: ''},
-  {src: 'images/main/02.jpg', alt: ''},
-  {src: 'images/main/03.jpg', alt: ''},
-  {src: 'images/main/04.jpg', alt: ''},
+  { src: '/images/main/01.jpg', alt: '' },
+  { src: '/images/main/02.jpg', alt: '' },
+  { src: '/images/main/03.jpg', alt: '' },
+  { src: '/images/main/04.jpg', alt: '' },
 ];
 ---
 
@@ -19,7 +15,7 @@ const imagenes = [
   <div class="swiper-wrapper">
     {imagenes.map((img) => (
       <div class="swiper-slide">
-        <img src={img.src} alt={img.alt} loading="eager" />
+        <img class="img-reveal" src={img.src} alt={img.alt} loading="eager" />
       </div>
     ))}
   </div>

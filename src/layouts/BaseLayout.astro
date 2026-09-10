@@ -4,27 +4,37 @@ import FooterNav from '@/components/FooterNav.astro';
 import ContactPanel from '@/components/ContactPanel.astro';
 import { ViewTransitions } from 'astro:transitions';
 import { slideUp } from '@/lib/transitions';
+import type { Lang } from '@/i18n/translations';
 
 interface Props {
   title: string;
   description?: string;
   navOverlay?: boolean;
+  lang?: Lang;
 }
+
+const descriptions: Record<Lang, string> = {
+  en: 'atoffice — architecture, interior design and technical consulting studio.',
+  es: 'atoffice — estudio de arquitectura, interiorismo y consultoría técnica.',
+};
 
 const {
   title,
-  description = 'atoffice — architecture, interior design and technical consulting studio.',
+  description,
   navOverlay = false,
+  lang = 'en',
 } = Astro.props;
+
+const finalDescription = description ?? descriptions[lang];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="description" content={description} />
+    <meta name="description" content={finalDescription} />
     <meta name="generator" content={Astro.generator} />
     <title>{title} · ATOFFICE</title>
     <ViewTransitions />
@@ -33,7 +43,10 @@ const {
     <div id="page-content" transition:animate={slideUp}>
       <slot />
     </div>
-    <FooterNav overlay={navOverlay} />
-    <ContactPanel />
+    <FooterNav overlay={navOverlay} lang={lang} />
+    <ContactPanel lang={lang} />
+    <script>
+      import '@/lib/img-reveal';
+    </script>
   </body>
 </html>

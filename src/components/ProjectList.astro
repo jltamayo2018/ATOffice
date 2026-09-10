@@ -1,13 +1,15 @@
 ---
 import type { Project } from '@/data/projects';
+import { translateWords, type Lang } from '@/i18n/translations';
 
 interface Props {
   projects: Project[];
   basePath?: string;
   activeSlug?: string;
+  lang?: Lang;
 }
 
-const { projects, basePath = '/works', activeSlug } = Astro.props;
+const { projects, basePath = '/works', activeSlug, lang = 'en' } = Astro.props;
 ---
 
 <ul class="lista">
@@ -17,10 +19,10 @@ const { projects, basePath = '/works', activeSlug } = Astro.props;
         href={`${basePath}/${p.slug}`}
         class:list={['lista__link', { 'is-selected': p.slug === activeSlug }]}
         data-slug={p.slug}
-        data-thumbnail={p.thumbnail}
+        data-thumbnail={p.hasContent ? p.thumbnail : undefined}
       >
         <span class="lista__titulo">{p.title}</span>
-        <span class="lista__tipo muted">{p.type.join(' · ')}</span>
+        <span class="lista__tipo muted">{translateWords(p.type, lang).join(' · ')}</span>
         <span class="lista__anio muted">{p.year}</span>
       </a>
     </li>
@@ -33,24 +35,27 @@ const { projects, basePath = '/works', activeSlug } = Astro.props;
     grid-template-columns: 1fr 1fr auto;
     align-items: baseline;
     gap: var(--space-4);
-    padding: var(--space-3) 0;
+    padding: var(--space-2) 0;
+  }
+
+  .lista__titulo,
+  .lista__tipo,
+  .lista__anio {
+    font-size: var(--fs-body);
   }
 
   .lista__titulo {
-    font-size: var(--fs-lead);
     color: var(--color-text-muted);
     transition: color var(--transition-fast);
   }
 
   .lista__tipo {
     text-align: left;
-    font-size: var(--fs-nav);
   }
 
   .lista__anio {
     text-align: right;
     min-width: 6ch;
-    font-size: var(--fs-nav);
   }
 
   /* Solo se resalta el texto (negrita), nunca la fila entera */

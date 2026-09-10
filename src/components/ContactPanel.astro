@@ -1,4 +1,13 @@
 ---
+import { contactContent, type Lang } from '@/i18n/translations';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const content = contactContent[lang];
+
 const contacts = [
   { name: 'Mariam Alhamouti', phone: '+34 606 819 677' },
   { name: 'Cristina Tamayo', phone: '+34 655 930 711' },
@@ -11,24 +20,15 @@ const contacts = [
   aria-hidden="true"
   aria-labelledby="contact-panel-title"
 >
-  <button
-    type="button"
-    class="contact-panel__close label muted"
-    data-contact-close
-    aria-label="Close contact panel"
-  >
-    Close
-  </button>
-
   <div class="contact-panel__body">
-    <p class="contact-panel__texto">
-      Get in touch — for collaborations, inquiries, or information, we'd be
-      glad to hear from you.
-    </p>
+    {content.intro.map((paragraph) => (
+      <p class="contact-panel__texto">{paragraph}</p>
+    ))}
 
-    <a class="contact-panel__web" href="https://www.atoffice.es">
-      www.atoffice.es
-    </a>
+    <p class="contact-panel__email-row muted">
+      {content.emailLabel}{' '}
+      <a class="contact-panel__email" href="mailto:info@atoffice.es">info@atoffice.es</a>
+    </p>
 
     <ul class="contact-panel__lista">
       {contacts.map((c) => (
@@ -50,9 +50,6 @@ const contacts = [
 
     const openTriggers = Array.from(
       document.querySelectorAll<HTMLElement>('[data-contact-open]')
-    );
-    const closeTriggers = Array.from(
-      panel.querySelectorAll<HTMLElement>('[data-contact-close]')
     );
 
     const isOpen = () => document.body.classList.contains('contact-open');
@@ -102,10 +99,6 @@ const contacts = [
       });
     });
 
-    closeTriggers.forEach((btn) => {
-      btn.addEventListener('click', () => close());
-    });
-
     // Enlace directo o recarga con el panel abierto (p. ej. /#contact,
     // o la redirección desde la antigua ruta /contact).
     if (location.hash === '#contact') {
@@ -124,10 +117,9 @@ const contacts = [
     width: min(480px, 90vw);
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
     background: var(--color-bg);
     border-left: 1px solid var(--color-border);
-    padding: var(--space-6) var(--content-padding-x)
+    padding: var(--space-5) var(--content-padding-x)
       calc(var(--nav-height) + var(--space-5));
     overflow-y: auto;
     transform: translateX(100%);
@@ -138,23 +130,24 @@ const contacts = [
     transform: translateX(0);
   }
 
-  .contact-panel__close {
-    align-self: flex-end;
-    transition: color var(--transition-fast);
-  }
-
-  .contact-panel__close:hover {
-    color: var(--color-text);
-  }
-
   .contact-panel__body {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--space-3);
+    font-size: var(--fs-nav);
   }
 
   .contact-panel__texto {
-    font-size: var(--fs-lead);
+    line-height: var(--lh-body);
+  }
+
+  .contact-panel__email {
+    color: var(--color-text);
+    font-weight: 800;
+  }
+
+  .contact-panel__email:hover {
+    text-decoration: underline;
   }
 
   .contact-panel__web {

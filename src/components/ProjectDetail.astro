@@ -1,12 +1,16 @@
 ---
 import type { Project } from '@/data/projects';
+import { worksLabels, translateWords, translateWord, archivingLabel, type Lang } from '@/i18n/translations';
 
 interface Props {
   project: Project;
   active?: boolean;
+  lang?: Lang;
 }
 
-const { project, active = false } = Astro.props;
+const { project, active = false, lang = 'en' } = Astro.props;
+const labels = worksLabels[lang];
+const description = lang === 'es' ? project.descriptionEs : project.description;
 ---
 
 <article
@@ -15,43 +19,58 @@ const { project, active = false } = Astro.props;
   aria-hidden={active ? 'false' : 'true'}
 >
   <button type="button" class="detail__close label muted" data-close-detail>
-    Close
+    {labels.close}
   </button>
 
-  <header class="detail__cabecera">
-    <h2 class="detail__titulo">{project.title}</h2>
-    <dl class="detail__meta">
-      <div>
-        <dt class="label muted">Type</dt>
-        <dd>{project.type.join(' · ')}</dd>
-      </div>
-      <div>
-        <dt class="label muted">Location</dt>
-        <dd>{project.location}</dd>
-      </div>
-      <div>
-        <dt class="label muted">Year</dt>
-        <dd>{project.year}</dd>
-      </div>
-      <div>
-        <dt class="label muted">Client</dt>
-        <dd>{project.client}</dd>
-      </div>
-      <div>
-        <dt class="label muted">Phase</dt>
-        <dd>{project.phase.join(' · ')}</dd>
-      </div>
-    </dl>
-  </header>
+  {project.hasContent ? (
+    <>
+      <header class="detail__cabecera">
+        <h2 class="detail__titulo">{project.title}</h2>
+        <dl class="detail__meta">
+          <div>
+            <dt class="label muted">{labels.type}</dt>
+            <dd>{translateWords(project.type, lang).join(' · ')}</dd>
+          </div>
+          <div>
+            <dt class="label muted">{labels.location}</dt>
+            <dd>{translateWord(project.location, lang)}</dd>
+          </div>
+          <div>
+            <dt class="label muted">{labels.year}</dt>
+            <dd>{project.year}</dd>
+          </div>
+          <div>
+            <dt class="label muted">{labels.client}</dt>
+            <dd>{translateWord(project.client, lang)}</dd>
+          </div>
+          <div>
+            <dt class="label muted">{labels.phase}</dt>
+            <dd>{translateWords(project.phase, lang).join(' · ')}</dd>
+          </div>
+        </dl>
+      </header>
 
-  <p class="detail__descripcion">{project.description}</p>
+      <p class="detail__descripcion">{description}</p>
 
-  <img
-    class="detail__imagen"
-    src={project.image}
-    alt={project.title}
-    loading="lazy"
-  />
+      <img
+        class="detail__imagen img-reveal"
+        src={project.image}
+        alt={project.title}
+        loading="lazy"
+      />
+    </>
+  ) : (
+    <>
+      <header class="detail__cabecera detail__cabecera--simple">
+        <h2 class="detail__titulo">{project.title}</h2>
+        <p class="detail__subtitulo muted">
+          {translateWords(project.type, lang).join(' · ')} · {project.year}
+        </p>
+      </header>
+
+      <p class="detail__archiving muted">{archivingLabel[lang]}</p>
+    </>
+  )}
 </article>
 
 <style>
@@ -84,10 +103,18 @@ const { project, active = false } = Astro.props;
     padding-bottom: var(--space-4);
   }
 
+  .detail__cabecera--simple {
+    align-items: baseline;
+  }
+
   .detail__titulo {
     font-size: var(--fs-h2);
     font-weight: 800;
     letter-spacing: -0.02em;
+  }
+
+  .detail__subtitulo {
+    font-size: var(--fs-body);
   }
 
   .detail__meta {
@@ -103,6 +130,11 @@ const { project, active = false } = Astro.props;
   .detail__descripcion {
     max-width: 60ch;
     font-size: var(--fs-lead);
+  }
+
+  .detail__archiving {
+    font-size: var(--fs-lead);
+    padding-top: var(--space-6);
   }
 
   .detail__imagen {

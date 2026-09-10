@@ -1,29 +1,48 @@
 ---
+import type { Lang } from '@/i18n/translations';
+
 interface Props {
   overlay?: boolean;
+  lang?: Lang;
 }
 
-const { overlay = false } = Astro.props;
+const { overlay = false, lang = 'en' } = Astro.props;
 
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const rawPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
+// Ruta actual sin el prefijo /es, para poder construir tanto la versión EN
+// como la ES del mismo enlace (home, works, info, works/[slug]...).
+const pathWithoutLang = rawPath === '/es' || rawPath.startsWith('/es/')
+  ? rawPath.slice(3) || '/'
+  : rawPath;
+
+const withLang = (targetLang: Lang, path: string) =>
+  targetLang === 'es' ? (path === '/' ? '/es' : `/es${path}`) : path;
+
+const homeHref = withLang(lang, '/');
 const links = [
-  { href: '/works', label: 'Works' },
-  { href: '/info', label: 'Info' },
+  { href: withLang(lang, '/works'), label: 'Works', match: '/works' },
+  { href: withLang(lang, '/info'), label: 'Info', match: '/info' },
 ];
 
-const isActive = (href: string) => path === href || path.startsWith(href + '/');
+const isActive = (matchPath: string) => {
+  const target = withLang(lang, matchPath);
+  return rawPath === target || rawPath.startsWith(target + '/');
+};
+
+const enHref = withLang('en', pathWithoutLang);
+const esHref = withLang('es', pathWithoutLang);
 ---
 
 <nav class:list={['footer-nav', { 'footer-nav--overlay': overlay }]} transition:animate="none">
   <div class="footer-nav__group">
-    <a href="/" class:list={['footer-nav__brand', { 'is-active': path === '/' }]}>
-      ATOFFICE
+    <a href={homeHref} class:list={['footer-nav__brand', { 'is-active': rawPath === homeHref }]}>
+      AToffice
     </a>
     {links.map((link) => (
       <a
         href={link.href}
-        class:list={['footer-nav__link', 'label', { 'is-active': isActive(link.href) }]}
+        class:list={['footer-nav__link', 'label', { 'is-active': isActive(link.match) }]}
       >
         {link.label}
       </a>
@@ -34,16 +53,18 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
   </div>
 
   <div class="footer-nav__group">
-    <!--
-      Selector de idioma: por ahora solo existe la versión EN (principal).
-      Cuando el contenido ES esté listo, activar el link de abajo
-      (quitar aria-disabled/pointer-events y apuntarlo a la ruta /es
-      equivalente a la página actual).
-    -->
     <div class="footer-nav__lang label" aria-label="Language selector">
-      <span class="is-active">EN</span>
+      {lang === 'en' ? (
+        <span class="is-active">EN</span>
+      ) : (
+        <a href={enHref}>EN</a>
+      )}
       <span class="footer-nav__lang-divider">/</span>
-      <span class="footer-nav__lang-disabled" aria-disabled="true">ES</span>
+      {lang === 'es' ? (
+        <span class="is-active">ES</span>
+      ) : (
+        <a href={esHref}>ES</a>
+      )}
     </div>
     <a
       href="https://www.instagram.com/at.context/"
@@ -68,12 +89,10 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     gap: var(--space-3);
     padding: 0 var(--content-padding-x);
     background: var(--color-bg);
-    border-top: 1px solid var(--color-border);
   }
 
   .footer-nav--overlay {
     background: transparent;
-    border-top: none;
   }
 
   .footer-nav__group {
@@ -88,30 +107,43 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     display: none;
   }
 
+  /* Chips: mismo tratamiento que la referencia (studioapt.kr) para los
+     enlaces del nav — fondo translúcido, esquinas rectas, un punto más
+     de peso visual que un simple enlace de texto. El desenfoque de fondo
+     es progresivo: si el navegador no soporta backdrop-filter, el chip
+     sigue siendo legible gracias al propio fondo translúcido. */
+  .footer-nav__brand,
+  .footer-nav__link {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    padding: 6px 10px 4px;
+    background: var(--color-chip-bg);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
   .footer-nav__brand {
     font-weight: 800;
     font-size: var(--fs-nav);
     letter-spacing: var(--tracking-wide);
-    white-space: nowrap;
-    color: var(--color-text-muted);
-    transition: color var(--transition-fast);
-  }
-
-  .footer-nav__link {
-    white-space: nowrap;
-    color: var(--color-text-muted);
-    transition: color var(--transition-fast);
-  }
-
-  .footer-nav__brand.is-active,
-  .footer-nav__link.is-active {
-    color: var(--color-text);
-    font-weight: 800;
   }
 
   .footer-nav__brand:hover,
   .footer-nav__link:hover {
+    background: var(--color-chip-bg-hover);
     color: var(--color-text);
+  }
+
+  /* Activo: mismo chip, sin invertir a negro — solo texto oscuro y
+     negrita, igual criterio que el hover pero permanente. */
+  .footer-nav__brand.is-active,
+  .footer-nav__link.is-active {
+    background: var(--color-chip-bg-hover);
+    color: var(--color-text);
+    font-weight: 800;
   }
 
   .footer-nav__lang {
@@ -126,11 +158,16 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     font-weight: 600;
   }
 
-  .footer-nav__lang-divider {
-    color: var(--color-border-soft);
+  .footer-nav__lang a {
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
   }
 
-  .footer-nav__lang-disabled {
+  .footer-nav__lang a:hover {
+    color: var(--color-text);
+  }
+
+  .footer-nav__lang-divider {
     color: var(--color-border-soft);
   }
 

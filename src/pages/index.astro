@@ -1,23 +1,24 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import ProjectList from "@/components/ProjectList.astro";
 import HeroGallery from "@/components/HeroGallery.astro";
-import { featuredProjects } from "@/data/projects";
+import { homeManifesto, type Lang } from "@/i18n/translations";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const pageTitle = lang === 'es' ? 'Inicio' : 'Home';
 ---
 
-<BaseLayout title="Home" navOverlay>
+<BaseLayout title={pageTitle} lang={lang} navOverlay>
   <div class="hero-screen">
     <div class="hero-screen__gallery">
       <HeroGallery />
     </div>
 
     <p class="hero-screen__manifiesto">
-      atoffice is a practice operating between architecture, interior design,
-      and the city, with research as our guiding thread. We approach
-      architecture as process: a sequence of deliberate choices where conceptual
-      clarity and technical precision are placed in service of tangible spatial
-      experience. We design with care and exigency, seeking solutions that are
-      sober, coherent, and constructible.
+      {homeManifesto[lang]}
     </p>
   </div>
 </BaseLayout>

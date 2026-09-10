@@ -2,33 +2,40 @@
 import ProjectList from '@/components/ProjectList.astro';
 import ProjectDetail from '@/components/ProjectDetail.astro';
 import { projects } from '@/data/projects';
+import type { Lang } from '@/i18n/translations';
 
 interface Props {
   activeSlug?: string;
+  lang?: Lang;
 }
 
-const { activeSlug } = Astro.props;
+const { activeSlug, lang = 'en' } = Astro.props;
+const basePath = lang === 'es' ? '/es/works' : '/works';
 ---
 
-<main class:list={['page', 'works', { 'has-selection': Boolean(activeSlug) }]}>
+<main
+  class:list={['page', 'works', { 'has-selection': Boolean(activeSlug) }]}
+  data-base-path={basePath}
+>
   <div class="works__list">
-    <ProjectList projects={projects} activeSlug={activeSlug} />
+    <ProjectList projects={projects} activeSlug={activeSlug} basePath={basePath} lang={lang} />
   </div>
 
   <div class="works__detail">
     {projects.map((p) => (
-      <ProjectDetail project={p} active={p.slug === activeSlug} />
+      <ProjectDetail project={p} active={p.slug === activeSlug} lang={lang} />
     ))}
   </div>
 
-  <img data-hover-thumb class="hover-thumb" alt="" />
+  <img data-hover-thumb class="hover-thumb img-reveal" alt="" />
 </main>
 
 <script>
   function initWorks() {
-    const root = document.querySelector('.works');
+    const root = document.querySelector('.works') as HTMLElement | null;
     if (!root) return;
 
+    const basePath = root.dataset.basePath || '/works';
     const rows = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-slug]'));
     const details = Array.from(root.querySelectorAll<HTMLElement>('[data-project-detail]'));
     const thumb = root.querySelector<HTMLImageElement>('[data-hover-thumb]');
@@ -45,7 +52,7 @@ const { activeSlug } = Astro.props;
       rows.forEach((r) => r.classList.toggle('is-selected', r.dataset.slug === slug));
       root.classList.toggle('has-selection', matched);
       if (pushState) {
-        history.pushState(null, '', matched ? `/works/${slug}` : '/works');
+        history.pushState(null, '', matched ? `${basePath}/${slug}` : basePath);
       }
       return matched;
     }
@@ -57,7 +64,7 @@ const { activeSlug } = Astro.props;
       });
       rows.forEach((r) => r.classList.remove('is-selected'));
       root.classList.remove('has-selection');
-      if (pushState) history.pushState(null, '', '/works');
+      if (pushState) history.pushState(null, '', basePath);
     }
 
     rows.forEach((row) => {
@@ -76,7 +83,14 @@ const { activeSlug } = Astro.props;
         row.addEventListener('mouseenter', () => {
           const src = row.dataset.thumbnail;
           if (!src) return;
-          thumb.src = src;
+          // La miniatura se reutiliza entre proyectos: cada vez que cambia
+          // el "src" hay que rearmar el blur-up (ver .img-reveal en
+          // global.css) en vez de depender del "load" inicial de la página.
+          if (thumb.src !== new URL(src, location.href).href) {
+            thumb.classList.remove('is-loaded');
+            thumb.onload = () => thumb.classList.add('is-loaded');
+            thumb.src = src;
+          }
           thumb.classList.add('is-visible');
         });
         row.addEventListener('mouseleave', () => {
@@ -90,7 +104,8 @@ const { activeSlug } = Astro.props;
     });
 
     window.addEventListener('popstate', () => {
-      const match = location.pathname.match(/^\/works\/([^/]+)\/?$/);
+      const escaped = basePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const match = location.pathname.match(new RegExp(`^${escaped}/([^/]+)/?$`));
       if (match) setActive(match[1], false);
       else clearActive(false);
     });
