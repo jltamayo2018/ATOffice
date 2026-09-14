@@ -7,11 +7,6 @@ interface Props {
 
 const { lang = 'en' } = Astro.props;
 const content = contactContent[lang];
-
-const contacts = [
-  { name: 'Mariam Alhamouti', phone: '+34 606 819 677' },
-  { name: 'Cristina Tamayo', phone: '+34 655 930 711' },
-];
 ---
 
 <aside
@@ -29,17 +24,6 @@ const contacts = [
       {content.emailLabel}{' '}
       <a class="contact-panel__email" href="mailto:info@atoffice.es">info@atoffice.es</a>
     </p>
-
-    <ul class="contact-panel__lista">
-      {contacts.map((c) => (
-        <li>
-          <span class="contact-panel__nombre">{c.name}</span>
-          <a class="muted" href={`tel:${c.phone.replace(/\s/g, '')}`}>
-            {c.phone}
-          </a>
-        </li>
-      ))}
-    </ul>
   </div>
 </aside>
 
@@ -134,7 +118,7 @@ const contacts = [
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-    font-size: var(--fs-nav);
+    font-size: var(--fs-body);
   }
 
   .contact-panel__texto {
@@ -156,23 +140,6 @@ const contacts = [
 
   .contact-panel__web:hover {
     text-decoration: underline;
-  }
-
-  .contact-panel__lista {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-
-  .contact-panel__lista li {
-    display: flex;
-    justify-content: space-between;
-    border-top: 1px solid var(--color-border-soft);
-    padding-top: var(--space-2);
-  }
-
-  .contact-panel__nombre {
-    font-weight: 700;
   }
 
   @media (max-width: 640px) {

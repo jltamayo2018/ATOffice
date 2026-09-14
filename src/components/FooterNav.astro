@@ -121,28 +121,26 @@ const esHref = withLang('es', pathWithoutLang);
     background: var(--color-chip-bg);
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
-    color: var(--color-text-muted);
+    color: var(--color-text);
+    font-size: calc(var(--fs-nav) * 1.3);
     font-weight: 700;
-    transition: color var(--transition-fast), background-color var(--transition-fast);
+    transition: background-color var(--transition-fast);
   }
 
   .footer-nav__brand {
-    font-size: var(--fs-nav);
     letter-spacing: var(--tracking-wide);
   }
 
   .footer-nav__brand:hover,
   .footer-nav__link:hover {
     background: var(--color-chip-bg-hover);
-    color: var(--color-text);
   }
 
-  /* Activo: mismo chip, sin invertir a negro — solo texto oscuro,
-     igual criterio que el hover pero permanente. */
+  /* Activo: mismo chip, texto siempre negro (igual con foto clara u
+     oscura de fondo), solo cambia el fondo respecto al reposo. */
   .footer-nav__brand.is-active,
   .footer-nav__link.is-active {
     background: var(--color-chip-bg-hover);
-    color: var(--color-text);
   }
 
   .footer-nav__lang {
