@@ -1,0 +1,108 @@
+---
+// Vista INFO (ABOUT, SERVICES, PROCESS). Los bloques data-lang se muestran según <html lang>.
+import type { Lang } from '@/i18n/ui';
+
+const { lang } = Astro.props as { lang: Lang };
+---
+
+<div class="view-info">
+<main class="page">
+  <div class="col-left">
+    <section class="about">
+      <h2 class="label" data-en="ABOUT" data-es="QUIÉNES SOMOS">{lang === 'es' ? 'QUIÉNES SOMOS' : 'ABOUT'}</h2>
+      <div class="text">
+        <div data-lang="en">
+        <p><strong>ATOFFICE</strong> is an architecture and urban planning studio in Madrid, founded by Mariam Al Hamouti and Cristina Tamayo. We are two architects with more than six years of experience in the city and its metropolitan area, working on projects of every scale and use—residential, sports, retail and office—managing complex permitting processes and coordinating both engineers and consultants.</p>
+        <p>We support investors from the initial feasibility study through to handover, and our knowledge of land and planning lets us assess the constraints of each operation. We don’t just aim for a well-resolved project: every design decision is geared towards real value for our clients—carefully designed, profitable projects that fit their context.</p>
+        </div>
+        <div data-lang="es">
+        <p><strong>ATOFFICE</strong> es un estudio de arquitectura y urbanismo en Madrid, fundado por Mariam Al Hamouti y Cristina Tamayo. Somos dos arquitectas con más de seis años de experiencia en la ciudad y su entorno metropolitano, desarrollamos proyectos de distintos usos en todas sus escalas: residencial, deportivo, comercial y de oficinas, gestionando tramitaciones complejas y coordinando tanto ingenierías como consultores.</p>
+        <p>Acompañamos a inversores desde el estudio de viabilidad previo hasta la entrega de la obra, nuestro conocimiento del suelo nos permite evaluar los condicionantes de cada operación. No buscando únicamente un proyecto bien resuelto, sino que cada decisión de diseño apunta a un beneficio real para nuestros clientes: proyectos cuidados, rentables y adaptados a su entorno.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="services">
+      <h2 class="label" data-en="SERVICES" data-es="SERVICIOS">{lang === 'es' ? 'SERVICIOS' : 'SERVICES'}</h2>
+      <div class="text">
+        <div data-lang="en">
+        <details>
+          <summary>Technical Consulting and feasibility studies</summary>
+          <ul>
+            <li>Urban development feasibility: planning parameters, real buildable area, regulatory constraints, and protected status assessment.</li>
+            <li>Construction cost estimation by use, location, and market conditions.</li>
+            <li>Investment return analysis across different development scenarios.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Architecture and Interior Design</summary>
+          <ul>
+            <li>Comprehensive development of new-build, refurbishment and renovation projects, from the initial concept through to the detailed design stage.</li>
+            <li>Interior design encompassing spatial layouts, materials, lighting and furniture.</li>
+            <li>Interventions in listed buildings.</li>
+            <li>Coordination of the various technical consultants.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>License &amp; Permit Management</summary>
+          <ul>
+            <li>Drafting of technical documentation required for permit applications: basic project, execution project, and supporting reports: heritage, environmental, utilities, and infrastructure.</li>
+            <li>Full permit preparation and processing, municipal and regional authorities.</li>
+            <li>Fees, taxes, and administrative documentation management.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Construction Management</summary>
+          <ul>
+            <li>On-site supervision and quality control as construction director.</li>
+            <li>Budget tracking, contractor liaison, and certification through to handover.</li>
+          </ul>
+        </details>
+        </div>
+        <div data-lang="es">
+        <details>
+          <summary>Consultoría técnica y estudios de viabilidad</summary>
+          <ul>
+            <li>Estudios de viabilidad urbanística: análisis de los parámetros urbanísticos, la edificabilidad real, las limitaciones normativas y el posible régimen de protección.</li>
+            <li>Estimación de los costes de construcción en función del uso, la ubicación y las condiciones del mercado.</li>
+            <li>Análisis de la rentabilidad de la inversión en distintos escenarios de desarrollo.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Proyecto de arquitectura e interiorismo</summary>
+          <ul>
+            <li>Desarrollo integral de proyectos de obra nueva, rehabilitación y reforma, desde el concepto inicial hasta el proyecto de ejecución.</li>
+            <li>Diseño de espacios interiores, materiales, iluminación y mobiliario.</li>
+            <li>Intervenciones en edificios protegidos.</li>
+            <li>Coordinación de los distintos agentes técnicos.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Gestión de licencias y permisos</summary>
+          <ul>
+            <li>Redacción de la documentación técnica necesaria para la solicitud de licencias: proyecto básico, proyecto de ejecución e informes justificativos en materia de patrimonio, medioambiente, suministros e infraestructuras.</li>
+            <li>Preparación y tramitación integral de licencias ante las administraciones municipales y autonómicas.</li>
+            <li>Gestión de tasas, impuestos y documentación administrativa.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Dirección de obra</summary>
+          <ul>
+            <li>Supervisión de la ejecución en obra y control de calidad como dirección facultativa.</li>
+            <li>Control presupuestario, coordinación con la empresa constructora y gestión de certificaciones hasta la recepción y entrega de la obra.</li>
+          </ul>
+        </details>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="process">
+    <h2 class="label" data-en="PROCESS" data-es="PROCESOS">{lang === 'es' ? 'PROCESOS' : 'PROCESS'}</h2>
+    <figure>
+      <img data-lang="en" src="/img/process-en-azul.png" alt="Process diagram: architecture project and urban planning consultancy, from the initial meeting to final delivery">
+      <img data-lang="es" src="/img/process-es-azul.png" alt="Esquema de proceso: proyecto de arquitectura y consultoría urbanística, desde la reunión inicial hasta la entrega final">
+    </figure>
+  </section>
+</main>
+</div>

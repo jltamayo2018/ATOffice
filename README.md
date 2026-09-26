@@ -1,68 +1,56 @@
 # atoffice
 
-Sitio web de **atoffice**, estudio de arquitectura, interiorismo y consultoría técnica ([atoffice.es](https://www.atoffice.es)).
+Sitio web de **ATOFFICE**, estudio de arquitectura y urbanismo en Madrid ([atoffice.es](https://www.atoffice.es)).
 
-Construido con [Astro](https://astro.build) como generador de sitio estático, sin backend ni base de datos: el contenido de los proyectos se gestiona como datos tipados en TypeScript.
+Construido con [Astro](https://astro.build) como generador de sitio estático, sin backend ni base de datos. El diseño es un port 1:1 del prototipo `atoffice.html` (v3, portada a sangre).
 
 ## Stack
 
-- [Astro 4](https://astro.build) — framework y renderizado estático, con `astro:transitions` para las animaciones entre páginas
-- [Swiper](https://swiperjs.com) — galerías / carruseles de imágenes
-- TypeScript
-- CSS plano con variables de diseño propias (`src/styles/tokens.css`)
+- [Astro 4](https://astro.build) — renderizado estático
+- TypeScript (vanilla, sin frameworks de UI)
+- CSS plano (`src/styles/global.css`) e Instrument Sans autoalojada (`public/fonts/`)
 
-## Estructura del proyecto
+## Cómo funciona
+
+El sitio se comporta como una sola página: portada, WORKS e INFO están en el mismo documento y se cambia entre ellas sin recargar (`src/scripts/site.ts`). Aun así, cada vista tiene su URL real, que se renderiza en el servidor con la vista, el idioma y el proyecto abierto ya puestos:
+
+| URL                     | Vista                         |
+| :---------------------- | :---------------------------- |
+| `/` · `/es`             | Portada                       |
+| `/works` · `/es/works`  | Índice de proyectos           |
+| `/works/<slug>`         | Índice con el proyecto abierto |
+| `/info` · `/es/info`    | About, servicios y proceso    |
+| `#contact`              | Abre la tarjeta de contacto   |
+
+## Estructura
 
 ```
 src/
-├── pages/
-│   ├── index.astro          # Home
-│   ├── info.astro
-│   ├── contact.astro
-│   └── works/
-│       ├── index.astro      # Listado de proyectos
-│       └── [slug].astro     # Detalle de proyecto (ruta dinámica)
+├── layouts/Site.astro          # Página completa (portada, WORKS, INFO, menú)
 ├── components/
-│   ├── HeroGallery.astro
-│   ├── ProjectList.astro
-│   ├── ProjectDetail.astro
-│   ├── WorksView.astro
-│   ├── FooterNav.astro
-│   └── ContactPanel.astro
-├── layouts/
-│   └── BaseLayout.astro     # Layout base (nav, panel de contacto, meta tags)
-├── data/
-│   └── projects.ts          # Catálogo de proyectos (fuente de contenido)
-├── lib/
-│   └── transitions.ts
-└── styles/
-    ├── global.css
-    └── tokens.css
-
-public/
-└── images/
-    ├── main/
-    └── projects/<slug>/     # cover.jpg y miniatura.jpg por proyecto
+│   ├── InfoView.astro
+│   ├── ContactPanel.astro
+│   └── projects/               # Ficha de cada proyecto (EZ8, E4, O143, MOL1)
+│       └── index.ts            # slug → ficha
+├── data/projects.ts            # Filas del índice de WORKS
+├── i18n/ui.ts                  # Idiomas, rutas y títulos
+├── scripts/site.ts             # Interacción (tira de fotos, panel, idioma…)
+├── styles/{global,fonts}.css
+└── pages/                      # Rutas EN y /es/
+public/img/                     # Imágenes del sitio
 ```
 
 ## Comandos
 
-Todos los comandos se ejecutan desde la raíz del proyecto:
-
 | Comando           | Acción                                              |
-| :----------------- | :--------------------------------------------------- |
-| `npm install`       | Instala las dependencias                              |
-| `npm run dev`       | Arranca el servidor de desarrollo en `localhost:4321` |
-| `npm run build`     | Genera el sitio estático en `./dist/`                 |
-| `npm run preview`   | Previsualiza el build de producción en local          |
+| :---------------- | :-------------------------------------------------- |
+| `npm install`     | Instala las dependencias                            |
+| `npm run dev`     | Servidor de desarrollo en `localhost:4321`          |
+| `npm run build`   | Genera el sitio estático en `./dist/`               |
+| `npm run preview` | Previsualiza el build de producción en local        |
 
-## Añadir un proyecto nuevo
+## Añadir un proyecto
 
-No hace falta tocar ninguna página. Basta con:
-
-1. Añadir un objeto nuevo al array `projects` en [`src/data/projects.ts`](src/data/projects.ts) (slug, título, tipo, ubicación, año, cliente, fases, descripción...).
-2. Colocar sus imágenes en `public/images/projects/<slug>/`:
-   - `cover.jpg` — imagen de portada
-   - `miniatura.jpg` — imagen vertical, usada en el hover del listado de proyectos (Works)
-
-Si el proyecto debe aparecer destacado en la home, marcar `featured: true`.
+1. Añadir su fila en `src/data/projects.ts` (slug, código, tipo EN/ES, año).
+2. Si ya tiene ficha: crear `src/components/projects/<CODIGO>.astro` (copiar una existente; las posiciones `--x/--y/--w/--h` son las del frame de Figma de 1320 px) y registrarla en `src/components/projects/index.ts`. Sin ficha, el panel muestra "Archiving in process...".
+3. Imágenes en `public/img/<slug>/`.

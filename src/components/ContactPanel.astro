@@ -1,151 +1,27 @@
 ---
-import { contactContent, type Lang } from '@/i18n/translations';
+// Tarjeta CONTACT (en móvil, hoja que sube desde abajo). Se abre con #contact.
+import type { Lang } from '@/i18n/ui';
 
-interface Props {
-  lang?: Lang;
-}
-
-const { lang = 'en' } = Astro.props;
-const content = contactContent[lang];
+const { lang } = Astro.props as { lang: Lang };
 ---
 
-<aside
-  id="contact-panel"
-  class="contact-panel"
-  aria-hidden="true"
-  aria-labelledby="contact-panel-title"
->
-  <div class="contact-panel__body">
-    {content.intro.map((paragraph) => (
-      <p class="contact-panel__texto">{paragraph}</p>
-    ))}
-
-    <p class="contact-panel__email-row muted">
-      {content.emailLabel}{' '}
-      <a class="contact-panel__email" href="mailto:info@atoffice.es">info@atoffice.es</a>
-    </p>
+<div class="contact-veil" data-close-contact></div>
+<aside class="contact" id="contact" role="dialog" aria-modal="true" aria-label={lang === 'es' ? 'Contacto' : 'Contact'} data-en-aria-label="Contact" data-es-aria-label="Contacto">
+  <button class="contact-close" type="button" aria-label={lang === 'es' ? 'Cerrar' : 'Close'} data-en-aria-label="Close" data-es-aria-label="Cerrar" data-close-contact>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 3l18 18M21 3L3 21"/></svg>
+  </button>
+  <div data-lang="en">
+    <p>Thank you for considering ATOFFICE for your project.</p>
+    <p>We collaborate with clients who recognize the value of a rigorous process and are committed to achieving the most refined outcome regardless of project scale.</p>
+    <p>While our work is structured by the specific demands of each case, we remain flexible in shaping a workflow adapted to your case. To help us understand the potential of the enquiry, please tell us about your idea, where the project will be located, its current stage, your estimated budget, and how you would like us to support you.</p>
+    <p>For collaborations, enquiries, or info <a href="mailto:info@atoffice.es">info@atoffice.es</a></p>
   </div>
+  <div data-lang="es">
+    <p>Gracias por contar con ATOFFICE para tu proyecto.</p>
+    <p>Trabajamos con clientes que valoran un proceso riguroso y que quieren llegar al mejor resultado posible, sea cual sea la escala del encargo.</p>
+    <p>Nuestro trabajo se estructura en función de las condiciones de cada caso, por eso mantenemos la flexibilidad necesaria para definir un método de trabajo que se ajuste al tuyo.</p>
+    <p>Para poder valorar el encargo, cuéntanos en qué consiste tu idea, dónde se desarrollará, en qué fase se encuentra, qué inversión tienes prevista y qué necesitas de nosotras.</p>
+    <p>Para colaboraciones, consultas o información: <a href="mailto:info@atoffice.es">info@atoffice.es</a></p>
+  </div>
+  <p class="contact-ig"><a href="https://www.instagram.com/at.office/" target="_blank" rel="noopener">INSTAGRAM</a></p>
 </aside>
-
-<script>
-  function initContactPanel() {
-    const panel = document.getElementById('contact-panel');
-    if (!panel) return;
-
-    const openTriggers = Array.from(
-      document.querySelectorAll<HTMLElement>('[data-contact-open]')
-    );
-
-    const isOpen = () => document.body.classList.contains('contact-open');
-
-    function setActiveTriggers(active: boolean) {
-      openTriggers.forEach((btn) => btn.classList.toggle('is-active', active));
-    }
-
-    function open(pushState = true) {
-      if (isOpen()) return;
-      document.body.classList.add('contact-open');
-      panel.setAttribute('aria-hidden', 'false');
-      setActiveTriggers(true);
-      if (pushState) {
-        history.pushState(null, '', location.pathname + location.search + '#contact');
-      }
-      document.addEventListener('keydown', onKeydown);
-      document.addEventListener('click', onDocumentClick, true);
-    }
-
-    function close(pushState = true) {
-      if (!isOpen()) return;
-      document.body.classList.remove('contact-open');
-      panel.setAttribute('aria-hidden', 'true');
-      setActiveTriggers(false);
-      if (pushState) {
-        history.pushState(null, '', location.pathname + location.search);
-      }
-      document.removeEventListener('keydown', onKeydown);
-      document.removeEventListener('click', onDocumentClick, true);
-    }
-
-    function onKeydown(e: KeyboardEvent) {
-      if (e.key === 'Escape') close();
-    }
-
-    function onDocumentClick(e: MouseEvent) {
-      const target = e.target as HTMLElement;
-      if (panel.contains(target) || target.closest('[data-contact-open]')) return;
-      close();
-    }
-
-    openTriggers.forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        isOpen() ? close() : open();
-      });
-    });
-
-    // Enlace directo o recarga con el panel abierto (p. ej. /#contact,
-    // o la redirección desde la antigua ruta /contact).
-    if (location.hash === '#contact') {
-      open(false);
-    }
-  }
-
-  document.addEventListener('astro:page-load', initContactPanel);
-</script>
-
-<style>
-  .contact-panel {
-    position: fixed;
-    inset: 0 0 0 auto;
-    z-index: 40;
-    width: min(480px, 90vw);
-    display: flex;
-    flex-direction: column;
-    background: var(--color-bg);
-    border-left: 1px solid var(--color-border);
-    padding: var(--space-5) var(--content-padding-x)
-      calc(var(--nav-height) + var(--space-5));
-    overflow-y: auto;
-    transform: translateX(100%);
-    transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  :global(body.contact-open) .contact-panel {
-    transform: translateX(0);
-  }
-
-  .contact-panel__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    font-size: var(--fs-body);
-  }
-
-  .contact-panel__texto {
-    line-height: var(--lh-body);
-  }
-
-  .contact-panel__email {
-    color: var(--color-text);
-    font-weight: 700;
-  }
-
-  .contact-panel__email:hover {
-    text-decoration: underline;
-  }
-
-  .contact-panel__web {
-    font-size: var(--fs-h2);
-  }
-
-  .contact-panel__web:hover {
-    text-decoration: underline;
-  }
-
-  @media (max-width: 640px) {
-    .contact-panel {
-      width: 100vw;
-      border-left: none;
-    }
-  }
-</style>

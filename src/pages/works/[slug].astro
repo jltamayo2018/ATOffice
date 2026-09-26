@@ -1,20 +1,12 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import WorksView from '@/components/WorksView.astro';
-import { projects, getProject } from '@/data/projects';
+import Site from '@/layouts/Site.astro';
+import { projects } from '@/data/projects';
 
 export function getStaticPaths() {
   return projects.map((p) => ({ params: { slug: p.slug } }));
 }
 
 const { slug } = Astro.params;
-const project = getProject(slug!);
-
-if (!project) {
-  return Astro.redirect('/works');
-}
 ---
 
-<BaseLayout title={project.title} description={project.description}>
-  <WorksView activeSlug={project.slug} />
-</BaseLayout>
+<Site lang="en" view="works" slug={slug} />

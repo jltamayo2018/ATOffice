@@ -1,149 +1,510 @@
-@import './tokens.css';
+/* Estilos del sitio, portados 1:1 del prototipo atoffice.html (v3, portada a sangre). */
 @import './fonts.css';
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/* Medidas del frame de Figma (4000 px de ancho) pasadas a vw: 40px = 1vw */
+:root {
+  --light: #c5daea;
+  --accent: #3177ac;
+  --ink: #000;
+  --bg: #fff;
+  --rule: #eef3f8;
+  --size-list: clamp(13px, 1vw, 40px);
+  --size-nav: clamp(12px, 0.9vw, 36px);
+  --pad-x: 0.825vw;
+  --nav-h: calc(var(--size-nav) + 1vw + 1.3vw + 8px);
+  --split: 53vw;
+  --ease: cubic-bezier(.2,.7,.2,1);
 }
-
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); height: 100%; }
 body {
-  margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  font-size: var(--fs-body);
+  font-family: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
   font-weight: 700;
-  line-height: var(--lh-body);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--ink);
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, p, ul, ol, figure {
-  margin: 0;
+/* ---------- Índice de proyectos ---------- */
+.list {
+  position: fixed;
+  top: 0; left: 0; bottom: var(--nav-h);
+  width: 100vw;
+  overflow: hidden;                      /* las filas llenan justo la altura: nunca hace falta barra */
+  transition: width .45s var(--ease);
 }
-
-ul, ol {
-  padding: 0;
+.index {
   list-style: none;
+  padding: 0.975vw var(--pad-x) 0;
+  font-size: var(--size-list);
+  color: var(--light);
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr var(--mid-w, 10.5em) 1fr;      /* la columna del centro, centrada en pantalla */
+  line-height: 0.99945;
+  cursor: pointer;
+  transition: grid-template-columns .45s var(--ease);
+}
+.row span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 1em; }
+.row span:last-child { text-align: right; padding-right: 0; }
+.row span:nth-child(2) { text-align: left; padding-right: 0; margin-left: 4ch; margin-right: -4ch; }   /* texto a la izquierda, desplazado un poco a la derecha */
+.row.is-active { color: var(--accent); }
+.index:hover .row.is-active:not(.is-open) { color: var(--light); }
+.index .row:hover, .row.is-open { color: var(--accent); }
+.row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Con un proyecto abierto la lista se comprime a la izquierda */
+body.has-project .list { width: var(--split); }
+body.has-project .row { grid-template-columns: 1fr var(--mid-w, 10.5em) 1fr; }
+body.has-project .row span:last-child { text-align: right; padding-right: 0; }
+
+/* ---------- Ventana del proyecto ---------- */
+.project {
+  position: fixed;
+  top: 0; right: 0; bottom: var(--nav-h);
+  width: calc(100vw - var(--split));
+  background: var(--bg);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  container-type: inline-size;
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform .45s var(--ease), visibility 0s linear .45s;
+}
+body.has-project .project {
+  transform: none;
+  visibility: visible;
+  transition: transform .45s var(--ease), visibility 0s;
+}
+/* Dentro del panel, 1 px de Figma = 1/1320 del ancho del panel */
+.project-head, .project-body, .pj {
+  --f: calc(100cqw / 1320);
+}
+.project-head {
+  position: sticky; top: 0; z-index: 3;
+  display: grid;
+  grid-template-columns: calc(var(--f) * 532) calc(var(--f) * 533) 1fr;
+  align-items: start;
+  padding: calc(var(--f) * 31) calc(var(--f) * 40) calc(var(--f) * 20) calc(var(--f) * 77);
+  background: var(--bg);
+  font-size: max(14px, calc(var(--f) * 30));
+  letter-spacing: -0.06em;
+  line-height: 0.99945;
+  color: var(--ink);
+}
+.project-close {
+  position: absolute;
+  top: calc(var(--f) * 22); right: calc(var(--f) * 30);
+  width: 1.4em; height: 1.4em;
+  display: grid; place-items: center;
+  background: none; border: 0; cursor: pointer; color: var(--ink);
+}
+.project-close svg { width: 0.9em; height: 0.9em; }
+.project-close:hover { color: var(--accent); }
+.project-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.project-body {
+  padding: calc(var(--f) * 40) calc(var(--f) * 77) 2em;
+  font-size: var(--size-nav);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
 }
 
-a {
-  color: inherit;
+/* Barra de desplazamiento del proyecto, entre la lista y el panel */
+.project { scrollbar-width: none; }
+.project::-webkit-scrollbar { display: none; }
+.pscroll {
+  position: fixed; z-index: 5;
+  top: 0; bottom: var(--nav-h);
+  left: calc(var(--split) - 5px);
+  width: 10px;
+  opacity: 0; visibility: hidden;
+  transition: opacity .3s ease, visibility 0s linear .3s;
+  cursor: pointer;
+  touch-action: none;
+}
+.pscroll::before {                 /* carril */
+  content: ""; position: absolute; top: 0; bottom: 0; left: 4px; width: 2px;
+  background: var(--rule);
+}
+.pscroll-thumb {
+  position: absolute; left: 2px; width: 6px; top: 0; min-height: 40px;
+  border-radius: 3px;
+  background: var(--light);
+  transition: background .15s ease, left .15s ease, width .15s ease;
+}
+.pscroll:hover .pscroll-thumb, .pscroll.is-dragging .pscroll-thumb { background: var(--accent); left: 1px; width: 8px; }
+body.has-project .pscroll { opacity: 1; visibility: visible; transition: opacity .3s ease .2s; }
+.pscroll.is-hidden { display: none; }
+@media (max-width: 700px) {
+  .pscroll { display: none; }
+  .project { scrollbar-width: thin; }
+  .project::-webkit-scrollbar { display: initial; }
+}
+
+/* ---------- Contenido de proyecto (frame de 1320 px de ancho) ---------- */
+.pj { padding-bottom: calc(var(--f) * 60); }
+.pj-block { position: relative; }
+.pj-img {
+  position: absolute; overflow: hidden;
+  left: calc(var(--f) * var(--x)); top: calc(var(--f) * var(--y));
+  width: calc(var(--f) * var(--w)); height: calc(var(--f) * var(--h));
+  background: #f4f4f4;
+}
+.pj-img img {
+  position: absolute;
+  left: var(--cl, 0); top: var(--ct, 0);
+  width: var(--cw, 100%); height: var(--ch, 100%);
+  max-width: none; object-fit: cover; display: block;
+  color: transparent; font-size: 0;
+}
+/* Texto colocado dentro de un bloque de imágenes, en su posición de Figma */
+.pj-block > .pj-text {
+  position: absolute; margin: 0;
+  left: calc(var(--f) * var(--x)); top: calc(var(--f) * var(--y));
+  max-width: none;
+}
+.pj-note { margin-top: 1.4em; font-weight: 400; }
+.pj-text {
+  margin-left: calc(var(--f) * var(--x));
+  width: calc(var(--f) * var(--w));
+  max-width: calc(100% - var(--f) * var(--x) * 2);
+  font-size: max(13px, calc(var(--f) * 25));
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: normal;
+}
+.pill, .nav a, .nav .lang {
+  display: inline-block;
+  background: #f2f2f2;
+  color: var(--ink);
   text-decoration: none;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-
-button {
+  padding: 0.25em 0.45em 0.2em;
+  border-radius: 2px;
   font: inherit;
-  color: inherit;
-  background: none;
-  border: none;
+  letter-spacing: inherit;
+  border: 0;
   cursor: pointer;
 }
+/* Menú: sin azul ni contorno; la sección seleccionada lleva el gris un pelín más oscuro */
+.nav a[aria-current="page"] { background: #e6e6e6; }
+.nav-right { display: flex; gap: 0.3vw; align-items: flex-end; }
+.pill:focus, .nav a:focus, .nav .lang:focus { outline: none; }
 
-::selection {
-  background: var(--color-text);
-  color: var(--color-bg);
+/* ---------- Navegación inferior ---------- */
+.nav {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: var(--nav-h);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 1.075vw calc(1.3vw + env(safe-area-inset-bottom, 0px)) 0.9vw;
+  background: var(--bg);
+  font-size: var(--size-nav);
+}
+.nav ul { list-style: none; display: flex; gap: 0.3vw; }
+
+@media (max-width: 700px) {
+  :root { --nav-h: 52px; }
+  .row, body.has-project .row { grid-template-columns: 1fr minmax(0, 2fr) 1fr; }
+  body.has-project .list { width: 100vw; border: 0; }
+  .project { width: 100vw; }
+  .nav ul { gap: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .list, .row, .project { transition: none !important; }
 }
 
-/* Utilidad: etiquetas tipo nav en mayúsculas y trackeadas */
-.label {
-  font-size: var(--fs-nav);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
+:root {
+  --size-label: clamp(14px, 1vw, 40px);
+  --size-text: clamp(13px, 0.75vw, 30px);
+  --gap-title: max(0.8vw, 10px);
 }
+/* Cambio entre vistas */
+.view-home, .view-works, .view-info { display: none; }
+.view-info { font-weight: 400; letter-spacing: normal; line-height: normal; }
+body[data-view="home"] .view-home,
+body[data-view="works"] .view-works,
+body[data-view="info"] .view-info { display: block; }
+body[data-view="info"] { overflow: auto; }
 
-/* Utilidad: texto secundario / inactivo */
-.muted {
-  color: var(--color-text-muted);
-}
-
-/* Utilidad: oculto en móvil retrato (mismo criterio que la referencia,
-   que distingue por orientación en vez de solo por ancho: un tablet en
-   landscape sigue contando como "desktop"). */
-@media (max-width: 812px) and (orientation: portrait) {
-  .pc-only {
-    display: none !important;
-  }
-}
-
-/* Contenedor de página estándar, deja hueco para el nav inferior fijo */
-.page {
-  min-height: 100svh;
-  padding: var(--space-5) var(--content-padding-x)
-    calc(var(--nav-height) + var(--space-5));
-}
-
-/* Transición entre páginas (ver src/lib/transitions.ts) */
-@keyframes slide-out-up {
-  to {
-    transform: translateY(-40px);
-    opacity: 0;
-  }
-}
-
-@keyframes slide-in-up {
-  from {
-    transform: translateY(40px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Panel de contacto (ver ContactPanel.astro): mientras está abierto,
-   la página que había detrás se atenúa y desenfoca, y deja de ser
-   interactiva, en lugar de navegar a una página aparte. */
-body.contact-open {
+/* ---------- Portada (ATOFFICE) ---------- */
+.home {
+  position: fixed; inset: 0;
+  /* altura de la tira: 1770 px en un frame de 4000 px, limitada por el alto de pantalla */
+  /* versión 3: las fotos altas llegan hasta el borde inferior, a sangre */
+  --strip-h: 100vh;
   overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
 }
-
-#page-content {
-  transition: filter var(--transition-base), opacity var(--transition-base);
-}
-
-body.contact-open #page-content {
-  filter: blur(6px);
-  opacity: 0.5;
+@supports (height: 100dvh) { .home { --strip-h: 100dvh; } }
+.home.is-grabbing { cursor: grabbing; }
+/* En portada el menú flota sobre las fotos: sin franja blanca, solo las pastillas grises */
+.nav { z-index: 10; }
+body[data-view="home"] .nav { background: transparent; }
+/* Pastillas del menú translúcidas sobre las fotos; el texto sigue negro opaco */
+body[data-view="home"] .nav a, body[data-view="home"] .nav .lang { background: rgba(242, 242, 242, 0.35); }
+body[data-view="home"] .nav a[aria-current="page"] { background: rgba(225, 225, 225, 0.5); }
+.home-logo {
+  position: absolute; z-index: 2;
+  top: 0.6vw; left: 1.025vw;
+  font-size: clamp(24px, 2vw, 80px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ink);
   pointer-events: none;
 }
-
-/* Utilidad: revelado "blur-up" para <img>. Arranca ligeramente desenfocada
-   y ampliada y, en cuanto termina de cargar (ver src/lib/img-reveal.ts,
-   que añade "is-loaded"), se enfoca y asienta a tamaño real. Puramente
-   CSS/JS, sin librería externa ni placeholders generados en build. */
-.img-reveal {
-  filter: blur(18px);
-  transform: scale(1.04);
-  opacity: 0;
-  transition: filter var(--transition-slow), transform var(--transition-slow),
-    opacity var(--transition-base);
+/* Logo: empieza como "al hamouti tamayo office" y se contrae a "atoffice" */
+.home-logo { white-space: nowrap; }
+.home-logo .lc {
+  display: inline-block; overflow: hidden; white-space: pre; vertical-align: top;
+  transition: width 1.1s var(--ease), opacity .8s ease;
+}
+.home-logo.is-short .lc { width: 0 !important; opacity: 0; }
+.strip {
+  position: absolute;
+  left: 0; top: 0;                 /* versión 2: fotos alineadas arriba */
+  height: var(--strip-h);
+  display: flex;
+  align-items: flex-start;
+  will-change: transform;
+}
+.shot {
+  flex: none;
+  width: calc(var(--strip-h) * var(--w) / 1767);
+  height: calc(var(--strip-h) * var(--h) / 1767);
+  margin-right: calc(var(--strip-h) * var(--gap, 0) / 1767);
+  margin-top: calc(var(--strip-h) * var(--mt, 0) / 1767);   /* se sale por arriba, como en Figma */
+  background: #f4f4f4;
+}
+.shot img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: var(--pos, 50% 50%);
+  color: transparent; font-size: 0;
+  -webkit-user-drag: none; pointer-events: none;
 }
 
-.img-reveal.is-loaded {
-  filter: blur(0);
-  transform: scale(1);
-  opacity: 1;
+/* ---------- Vista INFO ---------- */
+/* Medidas del frame de Figma (4000 px de ancho) pasadas a vw: 40px = 1vw */
+
+.page {
+  display: grid;
+  grid-template-columns: 50.05vw 1fr;
+  padding: 1.55vw 1.075vw calc(var(--nav-h) + 2vw) 1.075vw;
 }
 
-/* Si el usuario prefiere menos movimiento, se muestra sin animar */
-@media (prefers-reduced-motion: reduce) {
-  .img-reveal {
-    filter: none;
-    transform: none;
-    transition: opacity var(--transition-base);
+.label {
+  font-size: var(--size-label);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+.text {
+  font-size: var(--size-text);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.text p + p { margin-top: 0; }
+.text strong { font-weight: 700; }
+
+/* ABOUT */
+/* Misma distancia título–texto en todas las secciones */
+.label + .text { margin-top: var(--gap-title); }
+.about .text { max-width: 49vw; padding-right: 0; }
+
+/* SERVICES */
+.services { margin: 4.6vw 0 0 19.6vw; max-width: 29.3vw; }
+/* Servicios desplegables */
+.services details + details { margin-top: 0.35em; }
+.services summary {
+  list-style: none; cursor: pointer; font-weight: 700;
+  display: inline-flex; gap: 0.5em; align-items: baseline;
+}
+.services summary::-webkit-details-marker { display: none; }
+.services summary::after { content: "+"; font-weight: 500; }
+.services details[open] summary::after { content: "–"; }
+.services summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.services ul { list-style: none; margin: 0.3em 0 0.9em; }
+.services li { position: relative; padding-left: 1em; font-weight: 400; }
+.services li::before { content: "–"; position: absolute; left: 0; }
+
+/* PROCESS */
+.process .text { max-width: 62em; }
+.process figure {
+  margin: var(--gap-title) 0 0 0;          /* bajo el título, como en Figma */
+  width: min(47vw, calc((100vh - var(--nav-h) - 4.2vw) * 2040 / 2735));   /* entero y casi hasta abajo */
+  aspect-ratio: 2040 / 2735;
+}
+.process img { color: transparent; font-size: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+
+
+@media (max-width: 900px) {
+  :root { --nav-h: 52px; }
+  .page { grid-template-columns: 1fr; padding: 16px 16px calc(var(--nav-h) + 24px); gap: 48px; }
+  .about .text, .process .text { padding: 0; max-width: none; }
+  .services { margin: 40px 0 0; max-width: none; }
+  .process figure { margin: 24px 0 0; width: 100%; }
+  
+}
+
+/* ---------- Tarjeta CONTACT ---------- */
+.contact-veil {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(242, 240, 233, 0.6);   /* #f2f0e9 al 60 %, como en Figma */
+  -webkit-backdrop-filter: blur(1.5px);
+  backdrop-filter: blur(1.5px);
+}
+.contact {
+  position: fixed; z-index: 60;
+  top: 1vw; right: 1.075vw;
+  width: min(34vw, calc(100vw - 2.15vw));
+  min-width: min(420px, calc(100vw - 24px));
+  max-height: calc(100vh - 2vw - var(--nav-h));
+  overflow-y: auto;
+  padding: 1.4vw 1.6vw 1.8vw;
+  background: var(--bg);
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.08);
+  font-size: var(--size-text);
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1.35;
+}
+.contact p + p { margin-top: 1em; }
+.contact p:first-of-type { padding-right: 3em; }
+.contact a { color: var(--ink); font-weight: 700; text-decoration: none; }
+.contact a:hover { color: var(--accent); }
+.contact-close {
+  position: absolute; top: 1.2vw; right: 1.2vw;
+  width: 2.2em; height: 2.2em;
+  display: grid; place-items: center;
+  background: none; border: 0; cursor: pointer; color: var(--ink);
+}
+.contact-close svg { width: 1.6em; height: 1.6em; }
+.contact-close:hover { color: var(--accent); }
+.contact-close:focus, .contact a:focus { outline: none; }
+.contact-veil, .contact { opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
+body.contact-open .contact-veil, body.contact-open .contact { opacity: 1; visibility: visible; transition: opacity .25s ease; }
+@media (max-width: 700px) {
+  .contact { top: 12px; right: 12px; left: 12px; width: auto; min-width: 0; padding: 20px; max-height: calc(100vh - 24px); }
+  .contact-close { top: 12px; right: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .contact-veil, .contact { transition: none !important; } }
+/* Idiomas */
+html[lang="en"] [data-lang="es"], html[lang="es"] [data-lang="en"] { display: none !important; }
+
+/* =========================================================
+   MÓVIL (≤ 700 px)
+   Portada como depende.xyz: logo arriba, tira de fotos alineada abajo
+   hasta el borde de la pantalla, moviéndose sola.
+   Resto como studioapt.kr: menú de pastillas flotando abajo, idioma
+   arriba a la derecha, índice en filas grandes, proyecto desplegado
+   dentro de la lista, contacto como hoja que sube desde abajo.
+   ========================================================= */
+@media (max-width: 700px) {
+  :root { --nav-h: 64px; }
+
+  /* ---- Menú inferior flotante ---- */
+  .nav {
+    z-index: 10; height: auto; background: transparent !important;
+    padding: 0 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
   }
+  .nav a, .nav .lang { pointer-events: auto; }
+  .nav { display: flex; align-items: flex-end; gap: 5px; }
+  .nav ul { gap: 5px; }
+  .nav, .nav a, .nav .lang { font-size: min(15px, 3.6vw); }   /* cabe también en español (PROYECTOS, CONTACTO) */
+  .nav a, .nav .lang {
+    padding: 8px 7px 7px;
+    background: rgba(242, 242, 242, 0.7);              /* sobre texto, como studioapt */
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .nav > a, .nav-right > a { display: none; }          /* INSTAGRAM pasa a la hoja de contacto */
+  /* el idioma va abajo con el resto del menú, alineado a la derecha */
+  body.contact-open .nav { z-index: 70; }
+  body[data-view="home"] .nav a:not([aria-current="page"]), body[data-view="home"] .nav .lang { background: rgba(242, 242, 242, 0.35); }
+
+  /* ---- Portada (depende.xyz) ---- */
+  .home { --strip-h: 100vh; cursor: default; }            /* las fotos altas, de suelo a techo */
+  @supports (height: 1dvh) { .home { --strip-h: 100dvh; } }
+  .strip { top: auto !important; bottom: 0 !important; align-items: flex-end !important; }
+  .shot { margin-top: 0 !important; }
+  .home-logo { top: calc(12px + env(safe-area-inset-top, 0px)); left: 12px; font-size: min(30px, 7.6vw); }   /* el nombre completo cabe antes de contraerse */
+
+  /* ---- Índice de obras ---- */
+  .list, body.has-project .list {
+    bottom: 0; width: 100vw;
+    overflow-y: auto;                      /* el proyecto se despliega dentro: hay que poder bajar */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .list::-webkit-scrollbar { display: none; }
+  .index { font-size: 17px; padding: 16px 12px 0; }
+  .row, body.has-project .row { grid-template-columns: 1fr var(--mid-w, 10.5em) 1fr; line-height: 1.5; scroll-margin-top: 12px; }   /* columna central centrada en pantalla */
+  .row span:last-child { text-align: right; padding-right: 0; }
+  .row-detail { list-style: none; color: var(--ink); cursor: auto; }
+
+  /* ---- Proyecto desplegado dentro de la lista ---- */
+  .pscroll { display: none; }
+  .project { display: none; }
+  .row-detail .project {
+    display: block; position: static; width: auto;
+    transform: none; visibility: visible; transition: none;
+    overflow: visible; background: none;
+  }
+  .row-detail .project-head { display: none; }        /* la fila hace de cabecera; se cierra tocándola otra vez */
+  .row-detail .project-body { padding: 14px 0 44px; font-size: 16px; }
+  .pj { padding: 10px 0 36px; }
+  .pj-block {
+    height: auto !important; margin-top: 8px !important;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .pj-img {
+    position: relative; left: auto; top: auto;
+    width: 100%; height: auto;
+    aspect-ratio: calc(var(--w) / var(--h));
+    order: var(--x);                                    /* de izquierda a derecha, como en Figma */
+  }
+  .pj-text { margin: 24px 0 !important; width: auto; max-width: none; font-size: 16px; line-height: 1.35; }
+  .pj-block > .pj-text { position: static; order: var(--x); margin: 16px 0 !important; }
+
+  /* O143 en móvil: como en la web, fotos más pequeñas y pegadas a un lado */
+  .pj-o143 .pj-img.m-right { width: 52%; align-self: flex-end; }
+  .pj-o143 .pj-img.m-left  { width: 100%; }                         /* fachada a todo el ancho */
+  .pj-o143 .pj-img.m-plan  { width: 100%; aspect-ratio: 635 / 741; }   /* plano recortado, más grande */
+  .pj-o143 .pj-block { margin-top: 56px !important; }                /* más aire entre fotos */
+  .pj-o143 .pj-block:first-child { margin-top: 16px !important; }
+  .pj-o143 .pj-block:has(.m-side) { flex-direction: row; align-items: center; gap: 16px; }
+  .pj-o143 .pj-text.m-side { flex: 1; margin: 0 !important; }
+  .pj-o143 .pj-img.m-side { width: 32%; flex: none; }
+
+  /* ---- INFO ---- */
+  .page { grid-template-columns: 1fr; gap: 56px; padding: 20px 12px calc(var(--nav-h) + 48px); }
+  .label { font-size: 17px; }
+  .text { font-size: 16px; line-height: 1.35; }
+  .label + .text { margin-top: 14px; }
+  .about .text, .process .text { padding: 0; max-width: none; }
+  .services { margin: 48px 0 0; max-width: none; }
+  .process figure { margin: 24px 0 0; width: 100%; }
+
+  /* ---- CONTACT: hoja que sube desde abajo ---- */
+  .contact {
+    top: auto; left: 0; right: 0; bottom: 0;
+    width: 100%; min-width: 0; max-height: 72vh;
+    padding: 22px 12px calc(84px + env(safe-area-inset-bottom, 0px));
+    box-shadow: none; font-size: 16px; line-height: 1.35;
+    opacity: 1; transform: translateY(100%);
+    transition: transform .4s var(--ease), visibility 0s linear .4s;
+  }
+  body.contact-open .contact { transform: none; transition: transform .4s var(--ease); }
+  .contact p:first-of-type { padding-right: 44px; }
+  .contact-close { top: 14px; right: 8px; }
+  .contact .contact-ig { display: block; margin-top: 1.2em; }
 }
+.contact-ig { display: none; }

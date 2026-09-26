@@ -1,0 +1,119 @@
+---
+// Sitio completo en una sola página, como el prototipo atoffice.html:
+// portada, WORKS e INFO conviven en el DOM y se cambia entre ellas sin recargar.
+// Cada ruta (/, /works, /works/<slug>, /info y sus /es/…) renderiza esta misma
+// página con la vista, el idioma y el proyecto abierto ya puestos desde el servidor;
+// luego src/scripts/site.ts actualiza la URL con history.pushState.
+import '@/styles/global.css';
+import InfoView from '@/components/InfoView.astro';
+import ContactPanel from '@/components/ContactPanel.astro';
+import { projectPages } from '@/components/projects';
+import { projects, placeholders, getProject } from '@/data/projects';
+import { titles, descriptions, type Lang, type View } from '@/i18n/ui';
+
+interface Props {
+  lang: Lang;
+  view: View;
+  slug?: string;
+}
+
+const { lang, view, slug } = Astro.props;
+const t = (en: string, es: string) => (lang === 'es' ? es : en);
+const open = slug ? getProject(slug) : undefined;
+const OpenPage = open ? projectPages[open.slug] : undefined;
+const title = open ? `${open.code} · ATOFFICE` : titles[view][lang];
+
+const shots = [
+  { w: 1315, h: 1767, src: '/img/05.jpg' },
+  { w: 725, h: 1032, src: '/img/ez8/06-dormitorio.jpg' },
+  { w: 1186, h: 851, src: '/img/06.jpg' },
+  { w: 741, h: 708, src: '/img/cover/forjado.jpg' },
+  { w: 1197, h: 1767, src: '/img/cover/cocina-nogal.jpg' },
+  { w: 791, h: 1290, src: '/img/03.jpg', pos: '100% 50%' },
+  { w: 626, h: 511, src: '/img/07.jpg', pos: '100% 50%' },
+  { w: 1087, h: 1570, src: '/img/o143/04.jpg' },
+  { w: 1640, h: 1290, src: '/img/cover/salon.jpg' },
+];
+---
+
+<!doctype html>
+<html lang={lang}>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content={descriptions[lang]}>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preload" href="/fonts/instrument-sans/InstrumentSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body data-view={view} class={open ? 'has-project' : undefined}>
+  <div class="view-home">
+    <section class="home" aria-label={t('Selected projects', 'Proyectos seleccionados')}>
+      <h1 class="home-logo" aria-label="atoffice"><span aria-hidden="true"><span class="lk">a</span><span class="lc">l hamouti </span><span class="lk">t</span><span class="lc">amayo </span><span class="lk">office</span></span></h1>
+      <div class="strip">
+        {shots.map((s) => (
+          <figure class="shot" style={`--w:${s.w};--h:${s.h}${s.pos ? `;--pos:${s.pos}` : ''}`}><img src={s.src} alt=""></figure>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <div class="view-works">
+  <div class="list">
+    <ul class="index">
+      {projects.map((p) => (
+        <li
+          class:list={['row', { 'is-active': p.active && !open, 'is-open': open?.slug === p.slug }]}
+          tabindex="0" role="button" aria-controls="project"
+          data-slug={p.slug} data-head-type={p.headType}
+        ><span>{p.code}</span><span data-en={p.type.en} data-es={p.type.es}>{p.type[lang]}</span><span>{p.year}</span></li>
+      ))}
+      {placeholders.map((p) => (
+        <li class="row" tabindex="0" role="button" aria-controls="project"><span>XXXXX</span><span data-en={p.type.en} data-es={p.type.es}>{p.type[lang]}</span><span>{p.year}</span></li>
+      ))}
+    </ul>
+  </div>
+
+  <section class="project" id="project" aria-live="polite" aria-hidden={open ? 'false' : 'true'}>
+    <div class="project-head">
+      <span data-field="code">{open?.code}</span>
+      <span data-field="type">{open && (open.headType ?? open.type[lang])}</span>
+      <span data-field="year">{open?.year}</span>
+      <button class="project-close" type="button" aria-label={t('Close project', 'Cerrar proyecto')} data-en-aria-label="Close project" data-es-aria-label="Cerrar proyecto" data-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 3l18 18M21 3L3 21"/></svg>
+      </button>
+    </div>
+    <div class="project-content">
+      {open && (OpenPage ? <OpenPage /> : <div class="project-body">Archiving in process...</div>)}
+    </div>
+  </section>
+
+  <div class="pscroll" aria-hidden="true"><div class="pscroll-thumb"></div></div>
+
+  {Object.entries(projectPages).map(([s, Page]) => (
+    <template id={`project-${s}`}><Page /></template>
+  ))}
+  </div>
+
+  <InfoView lang={lang} />
+
+  <nav class="nav">
+    <ul>
+      <li><a href={lang === 'es' ? '/es' : '/'} data-view="home" aria-current={view === 'home' ? 'page' : undefined}>ATOFFICE</a></li>
+      <li><a href={lang === 'es' ? '/es/works' : '/works'} data-view="works" aria-current={view === 'works' ? 'page' : undefined} data-en="WORKS" data-es="PROYECTOS">{t('WORKS', 'PROYECTOS')}</a></li>
+      <li><a href={lang === 'es' ? '/es/info' : '/info'} data-view="info" aria-current={view === 'info' ? 'page' : undefined}>INFO</a></li>
+      <li><a href="#contact" data-contact data-en="CONTACT" data-es="CONTACTO">{t('CONTACT', 'CONTACTO')}</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="lang" type="button" data-lang-toggle aria-label={t('Cambiar a español', 'Switch to English')}>{t('ES', 'EN')}</button>
+      <a href="https://www.instagram.com/at.office/" target="_blank" rel="noopener">INSTAGRAM</a>
+    </div>
+  </nav>
+
+  <ContactPanel lang={lang} />
+
+  <script>
+    import '@/scripts/site';
+  </script>
+</body>
+</html>
