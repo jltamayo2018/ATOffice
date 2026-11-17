@@ -24,15 +24,15 @@ const OpenPage = open ? projectPages[open.slug] : undefined;
 const title = open ? `${open.code} · ATOFFICE` : titles[view][lang];
 
 const shots = [
-  { w: 1315, h: 1767, src: '/img/05.webp' },
-  { w: 725, h: 1032, src: '/img/ez8/06-dormitorio.webp' },
-  { w: 1186, h: 851, src: '/img/06.webp' },
-  { w: 741, h: 708, src: '/img/cover/forjado.webp' },
-  { w: 1197, h: 1767, src: '/img/cover/cocina-nogal.webp' },
-  { w: 791, h: 1290, src: '/img/03.webp', pos: '100% 50%' },
-  { w: 626, h: 511, src: '/img/07.webp', pos: '100% 50%' },
-  { w: 1087, h: 1570, src: '/img/o143/04.webp' },
-  { w: 1640, h: 1290, src: '/img/cover/salon.webp' },
+  { w: 1315, h: 1767, src: '/img/05.webp', alt: 'Fachada de hormigón visto con encofrado de tablas y terrazas, edificio de viviendas en Madrid' },
+  { w: 725, h: 1032, src: '/img/ez8/06-dormitorio.webp', alt: 'Dormitorio visto desde el pasillo a través de una puerta corredera, reforma EZ8 en Madrid' },
+  { w: 1186, h: 851, src: '/img/06.webp', alt: 'Cocina abierta con suelo de roble y grandes ventanales a la terraza, vivienda en Madrid' },
+  { w: 741, h: 708, src: '/img/cover/forjado.webp', alt: 'Forjado de chapa colaborante y mallazo durante la obra' },
+  { w: 1197, h: 1767, src: '/img/cover/cocina-nogal.webp', alt: 'Isla de cocina de nogal con carros móviles bajo la encimera, reforma EZ8 en Madrid' },
+  { w: 791, h: 1290, src: '/img/03.webp', alt: 'Pasillo blanco con viga de madera, puertas correderas y apliques de luz cálida, reforma EZ8', pos: '100% 50%' },
+  { w: 626, h: 511, src: '/img/07.webp', alt: 'Escalinata tallada en roca de granito con vistas a la sierra', pos: '100% 50%' },
+  { w: 1087, h: 1570, src: '/img/o143/04.webp', alt: 'Patio de luces con celosías de hormigón y fachada de ladrillo, reforma O143 en Madrid' },
+  { w: 1640, h: 1290, src: '/img/cover/salon.webp', alt: 'Salón vacío con ventanal corredero a una terraza de hormigón, vivienda en Madrid' },
 ];
 ---
 
@@ -53,7 +53,7 @@ const shots = [
       <h1 class="home-logo" aria-label="atoffice"><span aria-hidden="true"><span class="lk">a</span><span class="lc">l hamouti </span><span class="lk">t</span><span class="lc">amayo </span><span class="lk">office</span></span></h1>
       <div class="strip">
         {shots.map((s) => (
-          <figure class="shot" style={`--w:${s.w};--h:${s.h}${s.pos ? `;--pos:${s.pos}` : ''}`}><img src={s.src} alt=""></figure>
+          <figure class="shot" style={`--w:${s.w};--h:${s.h}${s.pos ? `;--pos:${s.pos}` : ''}`}><img src={s.src} alt={s.alt}></figure>
         ))}
       </div>
     </section>

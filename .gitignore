@@ -16,3 +16,7 @@ node_modules/
 
 # jetbrains setting folder
 .idea/
+
+# documentos locales (no se suben)
+CLAUDE.md
+informe-de-mejoras.html
